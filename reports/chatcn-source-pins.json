@@ -1,0 +1,44 @@
+{
+  "repository": "https://github.com/leonickson1/chatcn",
+  "commit": "a7be5c3aedebed3441594ce8f532acc168c1628c",
+  "license": "MIT",
+  "packageSha256": "2754aadd690bc22aef1b94245711369293dca97a0632041661db5365642687a4",
+  "files": [
+    {
+      "path": "evidence/learning/leonickson1__chatcn/source/LICENSE",
+      "size_bytes": 1076,
+      "sha256": "b39b724c17550e0dbb1e4266076b0beecf430181e0f5c44274d00fa8e80af62d",
+      "local": "research/chatcn-original/LICENSE"
+    },
+    {
+      "path": "evidence/learning/leonickson1__chatcn/source/src/app/globals.css",
+      "size_bytes": 19947,
+      "sha256": "d6fd563a4216268bb687514b86724a1bcb2a7537f1ea5f69ad783ec4242f5b8f",
+      "local": "research/chatcn-original/src/app/globals.css"
+    },
+    {
+      "path": "evidence/learning/leonickson1__chatcn/source/src/components/ui/chat/chat.tsx",
+      "size_bytes": 49974,
+      "sha256": "6589b29b481945ce36273a3c2661bafd755a66462660b97058164bf2272a0ffc",
+      "local": "research/chatcn-original/src/components/ui/chat/chat.tsx"
+    },
+    {
+      "path": "evidence/learning/leonickson1__chatcn/source/src/components/ui/chat/hooks.ts",
+      "size_bytes": 7220,
+      "sha256": "d3cf6dc3ac03703ea88e93ade77062e8d5e8b732d65a45db93551ccfa9c53c8e",
+      "local": "research/chatcn-original/src/components/ui/chat/hooks.ts"
+    },
+    {
+      "path": "evidence/learning/leonickson1__chatcn/source/src/components/ui/chat/layouts.tsx",
+      "size_bytes": 31868,
+      "sha256": "6cf3f67bb8629c7f812b00859dcc40f6b576ec11f06076f69015e38afbdbe3da",
+      "local": "research/chatcn-original/src/components/ui/chat/layouts.tsx"
+    },
+    {
+      "path": "evidence/learning/leonickson1__chatcn/source/src/components/ui/chat/types.ts",
+      "size_bytes": 2252,
+      "sha256": "4308b1ea20edf4b678d60b02cb22291914ed2718edd04ba7333462288448e825",
+      "local": "research/chatcn-original/src/components/ui/chat/types.ts"
+    }
+  ]
+}

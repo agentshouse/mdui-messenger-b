@@ -1,0 +1,194 @@
+[
+  {
+    "folder": "direct",
+    "requires_separate_room": true,
+    "changes": [
+      {
+        "op": "create",
+        "path": "chats/main.md",
+        "content": "---\ntype: \"messenger_chat\"\nid: \"9606a414-7edc-5db9-b210-a675ac9dc474\"\ntitle: \"Licensed donor chat sample (direct Room)\"\nmode: \"direct\"\ncreated_at: \"2009-02-13T23:31:30.123Z\"\n---\n"
+      },
+      {
+        "op": "create",
+        "path": "messages/351bc618-65f7-5455-8832-9ca81d84d1e6.md",
+        "content": "---\ntype: \"messenger_message\"\nid: \"351bc618-65f7-5455-8832-9ca81d84d1e6\"\nchat: \"../chats/main.md\"\ntext: \"[Licensed donor sample · Ann Smith]\\nHey John, just wanted to say - the new dashboard design looks fantastic! The way you organized the metrics is super intuitive. I can already tell our users are going to love it. Great work on this! 🙌\"\ncreated_at: \"2009-02-18T17:45:20.123Z\"\nkind: \"text\"\nattachments: []\n---\n"
+      },
+      {
+        "op": "create",
+        "path": "messages/e2960547-d983-581e-9a44-ff6c2c362594.md",
+        "content": "---\ntype: \"messenger_message\"\nid: \"e2960547-d983-581e-9a44-ff6c2c362594\"\nchat: \"../chats/main.md\"\ntext: \"[Licensed donor sample · John Doe]\\nOh, and could you also share those user feedback notes? I want to make sure we're really nailing what they need before we ship this.\"\ncreated_at: \"2009-02-17T13:41:50.123Z\"\nkind: \"text\"\nattachments: []\n---\n"
+      },
+      {
+        "op": "create",
+        "path": "messages/f0be5acb-431e-5159-8285-c107160c45bb.md",
+        "content": "---\ntype: \"messenger_message\"\nid: \"f0be5acb-431e-5159-8285-c107160c45bb\"\nchat: \"../chats/main.md\"\ntext: \"[Licensed donor sample · John Doe]\\nJust tested the new checkout flow - it's so smooth! The loading states you added make such a difference. Customers are gonna love this! 🚀\"\ncreated_at: \"2009-02-17T13:41:40.123Z\"\nkind: \"text\"\nattachments: []\n---\n"
+      },
+      {
+        "op": "create",
+        "path": "messages/99488b76-b225-59a3-a410-b26722ddc231.md",
+        "content": "---\ntype: \"messenger_message\"\nid: \"99488b76-b225-59a3-a410-b26722ddc231\"\nchat: \"../chats/main.md\"\ntext: \"[Licensed donor sample · John Doe]\\nSweet! I'll check it out on mobile too and let you know. Thanks for keeping accessibility in mind - that's real value right there!\"\ncreated_at: \"2009-02-15T06:08:10.123Z\"\nkind: \"text\"\nattachments: []\n---\n"
+      },
+      {
+        "op": "create",
+        "path": "messages/bc8d7e92-2fd1-5c1c-ba20-f82fb72e6ec7.md",
+        "content": "---\ntype: \"messenger_message\"\nid: \"bc8d7e92-2fd1-5c1c-ba20-f82fb72e6ec7\"\nchat: \"../chats/main.md\"\ntext: \"[Licensed donor sample · Ann Smith]\\nBut first, could you give the responsive design a quick look? I want to make sure it feels great on all devices before we show it to users.\"\ncreated_at: \"2009-02-15T06:08:00.123Z\"\nkind: \"text\"\nattachments: []\n---\n"
+      },
+      {
+        "op": "create",
+        "path": "messages/e8c3defb-3467-563b-97a1-777946d67926.md",
+        "content": "---\ntype: \"messenger_message\"\nid: \"e8c3defb-3467-563b-97a1-777946d67926\"\nchat: \"../chats/main.md\"\ntext: \"[Licensed donor sample · Ann Smith]\\nHey! Just wrapped up the dashboard redesign. Focused on making the key metrics super easy to find - think our users will really appreciate it!\"\ncreated_at: \"2009-02-15T06:07:50.123Z\"\nkind: \"text\"\nattachments: []\n---\n"
+      },
+      {
+        "op": "create",
+        "path": "messages/5a231b6a-953d-500a-acf9-87628a29cc46.md",
+        "content": "---\ntype: \"messenger_message\"\nid: \"5a231b6a-953d-500a-acf9-87628a29cc46\"\nchat: \"../chats/main.md\"\ntext: \"[Licensed donor sample · John Doe]\\nAlso, how's the performance optimization going? Any wins on those load times we discussed?\"\ncreated_at: \"2009-02-15T06:06:10.123Z\"\nkind: \"text\"\nattachments: []\n---\n"
+      },
+      {
+        "op": "create",
+        "path": "messages/53aac9ee-8141-5258-a1ab-2f5711a20b2d.md",
+        "content": "---\ntype: \"messenger_message\"\nid: \"53aac9ee-8141-5258-a1ab-2f5711a20b2d\"\nchat: \"../chats/main.md\"\ntext: \"[Licensed donor sample · John Doe]\\nHey! How's it going? Did you get a chance to look at those user journey mockups? Want to make sure we're solving the right problems for them.\"\ncreated_at: \"2009-02-15T06:05:10.123Z\"\nkind: \"text\"\nattachments: []\n---\n"
+      },
+      {
+        "op": "create",
+        "path": "messages/a77cc945-aa2d-556e-8dd5-b4bdc7629336.md",
+        "content": "---\ntype: \"messenger_message\"\nid: \"a77cc945-aa2d-556e-8dd5-b4bdc7629336\"\nchat: \"../chats/main.md\"\ntext: \"[Licensed donor sample · Ann Smith]\\nI'll ping you here once it's ready for a demo!\"\ncreated_at: \"2009-02-13T23:31:59.123Z\"\nkind: \"text\"\nattachments: []\n---\n"
+      },
+      {
+        "op": "create",
+        "path": "messages/fe2b03ab-26cf-5b9a-bf53-e7826367e010.md",
+        "content": "---\ntype: \"messenger_message\"\nid: \"fe2b03ab-26cf-5b9a-bf53-e7826367e010\"\nchat: \"../chats/main.md\"\ntext: \"[Licensed donor sample · Ann Smith]\\nPerfect! Time to build something awesome ✨\"\ncreated_at: \"2009-02-13T23:31:57.123Z\"\nkind: \"text\"\nattachments: []\n---\n"
+      },
+      {
+        "op": "create",
+        "path": "messages/7bb11419-9e2c-5264-9100-242c6d0ee9a5.md",
+        "content": "---\ntype: \"messenger_message\"\nid: \"7bb11419-9e2c-5264-9100-242c6d0ee9a5\"\nchat: \"../chats/main.md\"\ntext: \"[Licensed donor sample · Ann Smith]\\nAwesome, thanks! That totally makes sense now. I love how we're thinking about the end user experience here. Can't wait to see their reaction when this goes live!\"\ncreated_at: \"2009-02-13T23:31:53.123Z\"\nkind: \"text\"\nattachments: []\n---\n"
+      },
+      {
+        "op": "create",
+        "path": "messages/4766ee39-dbfe-5a38-95e7-7f101cbe3588.md",
+        "content": "---\ntype: \"messenger_message\"\nid: \"4766ee39-dbfe-5a38-95e7-7f101cbe3588\"\nchat: \"../chats/main.md\"\ntext: \"[Licensed donor sample · John Doe]\\nSo basically - keep the interactions snappy, add subtle animations for feedback, and make sure error states are super clear. When users feel confident using the interface, they stick around. That's the value we're delivering! 😊\"\ncreated_at: \"2009-02-13T23:31:50.123Z\"\nkind: \"text\"\nattachments: []\n---\n"
+      },
+      {
+        "op": "create",
+        "path": "messages/9f2cf918-af74-5bce-86e8-f1eb334073de.md",
+        "content": "---\ntype: \"messenger_message\"\nid: \"9f2cf918-af74-5bce-86e8-f1eb334073de\"\nchat: \"../chats/main.md\"\ntext: \"[Licensed donor sample · John Doe]\\nHere's what I'm thinking:\"\ncreated_at: \"2009-02-13T23:31:50.123Z\"\nkind: \"text\"\nattachments: []\n---\n"
+      },
+      {
+        "op": "create",
+        "path": "messages/580254d3-5840-504b-bf38-fe6209bf820b.md",
+        "content": "---\ntype: \"messenger_message\"\nid: \"580254d3-5840-504b-bf38-fe6209bf820b\"\nchat: \"../chats/main.md\"\ntext: \"[Licensed donor sample · John Doe]\\nAbsolutely! Let me pull up my notes from the customer interviews\"\ncreated_at: \"2009-02-13T23:31:39.123Z\"\nkind: \"text\"\nattachments: []\n---\n"
+      },
+      {
+        "op": "create",
+        "path": "messages/d863ee87-4bc8-5c7d-b1a9-2616aa936f1a.md",
+        "content": "---\ntype: \"messenger_message\"\nid: \"d863ee87-4bc8-5c7d-b1a9-2616aa936f1a\"\nchat: \"../chats/main.md\"\ntext: \"[Licensed donor sample · John Doe]\\nHey! Doing great, thanks for asking!\"\ncreated_at: \"2009-02-13T23:31:35.123Z\"\nkind: \"text\"\nattachments: []\n---\n"
+      },
+      {
+        "op": "create",
+        "path": "messages/9d18ec0e-5271-5aa6-a88d-1b13df737cc1.md",
+        "content": "---\ntype: \"messenger_message\"\nid: \"9d18ec0e-5271-5aa6-a88d-1b13df737cc1\"\nchat: \"../chats/main.md\"\ntext: \"[Licensed donor sample · Ann Smith]\\nCould you share your thoughts on the UX flow? Want to make sure we're creating real value for our users.\"\ncreated_at: \"2009-02-13T23:31:32.123Z\"\nkind: \"text\"\nattachments: []\n---\n"
+      },
+      {
+        "op": "create",
+        "path": "messages/5dc506f3-a56f-5939-84c7-48b643f1afb6.md",
+        "content": "---\ntype: \"messenger_message\"\nid: \"5dc506f3-a56f-5939-84c7-48b643f1afb6\"\nchat: \"../chats/main.md\"\ntext: \"[Licensed donor sample · Ann Smith]\\nHey there! How's your day going?\"\ncreated_at: \"2009-02-13T23:31:30.123Z\"\nkind: \"text\"\nattachments: []\n---\n"
+      }
+    ]
+  },
+  {
+    "folder": "group",
+    "requires_separate_room": true,
+    "changes": [
+      {
+        "op": "create",
+        "path": "chats/main.md",
+        "content": "---\ntype: \"messenger_chat\"\nid: \"e95ab216-289b-5fe2-a6a0-379db8a8e8e3\"\ntitle: \"Licensed donor chat sample (group Room)\"\nmode: \"group\"\ncreated_at: \"2009-02-13T23:31:30.123Z\"\n---\n"
+      },
+      {
+        "op": "create",
+        "path": "messages/9059af21-4dfa-58ee-9960-9eff8e530d14.md",
+        "content": "---\ntype: \"messenger_message\"\nid: \"9059af21-4dfa-58ee-9960-9eff8e530d14\"\nchat: \"../chats/main.md\"\ntext: \"[Licensed donor sample · Ann Smith]\\nHey John, just wanted to say - the new dashboard design looks fantastic! The way you organized the metrics is super intuitive. I can already tell our users are going to love it. Great work on this! 🙌\"\ncreated_at: \"2009-02-18T17:45:20.123Z\"\nkind: \"text\"\nattachments: []\n---\n"
+      },
+      {
+        "op": "create",
+        "path": "messages/019f7eaf-3cf6-5c19-b513-b6aa0c0bc342.md",
+        "content": "---\ntype: \"messenger_message\"\nid: \"019f7eaf-3cf6-5c19-b513-b6aa0c0bc342\"\nchat: \"../chats/main.md\"\ntext: \"[Licensed donor sample · John Doe]\\nOh, and could you also share those user feedback notes? I want to make sure we're really nailing what they need before we ship this.\"\ncreated_at: \"2009-02-17T13:41:50.123Z\"\nkind: \"text\"\nattachments: []\n---\n"
+      },
+      {
+        "op": "create",
+        "path": "messages/695637ef-818b-5978-b160-46365b391bde.md",
+        "content": "---\ntype: \"messenger_message\"\nid: \"695637ef-818b-5978-b160-46365b391bde\"\nchat: \"../chats/main.md\"\ntext: \"[Licensed donor sample · John Doe]\\nJust tested the new checkout flow - it's so smooth! The loading states you added make such a difference. Customers are gonna love this! 🚀\"\ncreated_at: \"2009-02-17T13:41:40.123Z\"\nkind: \"text\"\nattachments: []\n---\n"
+      },
+      {
+        "op": "create",
+        "path": "messages/7da4113b-7df7-57d0-89c0-11ea897f5ac9.md",
+        "content": "---\ntype: \"messenger_message\"\nid: \"7da4113b-7df7-57d0-89c0-11ea897f5ac9\"\nchat: \"../chats/main.md\"\ntext: \"[Licensed donor sample · John Doe]\\nSweet! I'll check it out on mobile too and let you know. Thanks for keeping accessibility in mind - that's real value right there!\"\ncreated_at: \"2009-02-15T06:08:10.123Z\"\nkind: \"text\"\nattachments: []\n---\n"
+      },
+      {
+        "op": "create",
+        "path": "messages/ecb81151-9b7f-54e0-ac09-650cf4d3e16b.md",
+        "content": "---\ntype: \"messenger_message\"\nid: \"ecb81151-9b7f-54e0-ac09-650cf4d3e16b\"\nchat: \"../chats/main.md\"\ntext: \"[Licensed donor sample · Ann Smith]\\nBut first, could you give the responsive design a quick look? I want to make sure it feels great on all devices before we show it to users.\"\ncreated_at: \"2009-02-15T06:08:00.123Z\"\nkind: \"text\"\nattachments: []\n---\n"
+      },
+      {
+        "op": "create",
+        "path": "messages/b0791871-5ad9-5eb1-89f1-04085b085323.md",
+        "content": "---\ntype: \"messenger_message\"\nid: \"b0791871-5ad9-5eb1-89f1-04085b085323\"\nchat: \"../chats/main.md\"\ntext: \"[Licensed donor sample · Ann Smith]\\nHey! Just wrapped up the dashboard redesign. Focused on making the key metrics super easy to find - think our users will really appreciate it!\"\ncreated_at: \"2009-02-15T06:07:50.123Z\"\nkind: \"text\"\nattachments: []\n---\n"
+      },
+      {
+        "op": "create",
+        "path": "messages/b000d3ff-b057-5191-8b3d-2f0fb460d046.md",
+        "content": "---\ntype: \"messenger_message\"\nid: \"b000d3ff-b057-5191-8b3d-2f0fb460d046\"\nchat: \"../chats/main.md\"\ntext: \"[Licensed donor sample · John Doe]\\nAlso, how's the performance optimization going? Any wins on those load times we discussed?\"\ncreated_at: \"2009-02-15T06:06:10.123Z\"\nkind: \"text\"\nattachments: []\n---\n"
+      },
+      {
+        "op": "create",
+        "path": "messages/f902861a-8136-5dbe-b95f-f6720af7a0d9.md",
+        "content": "---\ntype: \"messenger_message\"\nid: \"f902861a-8136-5dbe-b95f-f6720af7a0d9\"\nchat: \"../chats/main.md\"\ntext: \"[Licensed donor sample · John Doe]\\nHey! How's it going? Did you get a chance to look at those user journey mockups? Want to make sure we're solving the right problems for them.\"\ncreated_at: \"2009-02-15T06:05:10.123Z\"\nkind: \"text\"\nattachments: []\n---\n"
+      },
+      {
+        "op": "create",
+        "path": "messages/0f28e329-4773-55ad-90d5-439e4d6e1343.md",
+        "content": "---\ntype: \"messenger_message\"\nid: \"0f28e329-4773-55ad-90d5-439e4d6e1343\"\nchat: \"../chats/main.md\"\ntext: \"[Licensed donor sample · Ann Smith]\\nI'll ping you here once it's ready for a demo!\"\ncreated_at: \"2009-02-13T23:31:59.123Z\"\nkind: \"text\"\nattachments: []\n---\n"
+      },
+      {
+        "op": "create",
+        "path": "messages/2c429977-0ddb-5966-bf0c-c2c0a98c3299.md",
+        "content": "---\ntype: \"messenger_message\"\nid: \"2c429977-0ddb-5966-bf0c-c2c0a98c3299\"\nchat: \"../chats/main.md\"\ntext: \"[Licensed donor sample · Ann Smith]\\nPerfect! Time to build something awesome ✨\"\ncreated_at: \"2009-02-13T23:31:57.123Z\"\nkind: \"text\"\nattachments: []\n---\n"
+      },
+      {
+        "op": "create",
+        "path": "messages/047d607a-be3d-5d59-b4ee-a14f590a4166.md",
+        "content": "---\ntype: \"messenger_message\"\nid: \"047d607a-be3d-5d59-b4ee-a14f590a4166\"\nchat: \"../chats/main.md\"\ntext: \"[Licensed donor sample · Ann Smith]\\nAwesome, thanks! That totally makes sense now. I love how we're thinking about the end user experience here. Can't wait to see their reaction when this goes live!\"\ncreated_at: \"2009-02-13T23:31:53.123Z\"\nkind: \"text\"\nattachments: []\n---\n"
+      },
+      {
+        "op": "create",
+        "path": "messages/629b5336-950b-5d5e-9cf7-428f0f8a39c5.md",
+        "content": "---\ntype: \"messenger_message\"\nid: \"629b5336-950b-5d5e-9cf7-428f0f8a39c5\"\nchat: \"../chats/main.md\"\ntext: \"[Licensed donor sample · John Doe]\\nSo basically - keep the interactions snappy, add subtle animations for feedback, and make sure error states are super clear. When users feel confident using the interface, they stick around. That's the value we're delivering! 😊\"\ncreated_at: \"2009-02-13T23:31:50.123Z\"\nkind: \"text\"\nattachments: []\n---\n"
+      },
+      {
+        "op": "create",
+        "path": "messages/474bccc0-8237-50a6-8d69-b2713133f206.md",
+        "content": "---\ntype: \"messenger_message\"\nid: \"474bccc0-8237-50a6-8d69-b2713133f206\"\nchat: \"../chats/main.md\"\ntext: \"[Licensed donor sample · John Doe]\\nHere's what I'm thinking:\"\ncreated_at: \"2009-02-13T23:31:50.123Z\"\nkind: \"text\"\nattachments: []\n---\n"
+      },
+      {
+        "op": "create",
+        "path": "messages/dfc22240-320a-5a36-9495-e62f9986b676.md",
+        "content": "---\ntype: \"messenger_message\"\nid: \"dfc22240-320a-5a36-9495-e62f9986b676\"\nchat: \"../chats/main.md\"\ntext: \"[Licensed donor sample · John Doe]\\nAbsolutely! Let me pull up my notes from the customer interviews\"\ncreated_at: \"2009-02-13T23:31:39.123Z\"\nkind: \"text\"\nattachments: []\n---\n"
+      },
+      {
+        "op": "create",
+        "path": "messages/0f7168ee-9339-5b37-a532-35acca268531.md",
+        "content": "---\ntype: \"messenger_message\"\nid: \"0f7168ee-9339-5b37-a532-35acca268531\"\nchat: \"../chats/main.md\"\ntext: \"[Licensed donor sample · John Doe]\\nHey! Doing great, thanks for asking!\"\ncreated_at: \"2009-02-13T23:31:35.123Z\"\nkind: \"text\"\nattachments: []\n---\n"
+      },
+      {
+        "op": "create",
+        "path": "messages/a4ede990-f7e7-5083-a2de-a2b8b7cebb6c.md",
+        "content": "---\ntype: \"messenger_message\"\nid: \"a4ede990-f7e7-5083-a2de-a2b8b7cebb6c\"\nchat: \"../chats/main.md\"\ntext: \"[Licensed donor sample · Ann Smith]\\nCould you share your thoughts on the UX flow? Want to make sure we're creating real value for our users.\"\ncreated_at: \"2009-02-13T23:31:32.123Z\"\nkind: \"text\"\nattachments: []\n---\n"
+      },
+      {
+        "op": "create",
+        "path": "messages/e594bccf-65a5-5954-9024-62e417bd03bf.md",
+        "content": "---\ntype: \"messenger_message\"\nid: \"e594bccf-65a5-5954-9024-62e417bd03bf\"\nchat: \"../chats/main.md\"\ntext: \"[Licensed donor sample · Ann Smith]\\nHey there! How's your day going?\"\ncreated_at: \"2009-02-13T23:31:30.123Z\"\nkind: \"text\"\nattachments: []\n---\n"
+      }
+    ]
+  }
+]

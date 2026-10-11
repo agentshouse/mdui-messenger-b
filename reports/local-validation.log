@@ -1,0 +1,109 @@
+Messenger Master1118 scope correction verification — synthetic fixtures only
+v24.19.0
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> house-messenger@0.0.0 typecheck
+> tsc --noEmit && tsc -p tsconfig.test.json --noEmit
+
+npm notice
+npm notice New major version of npm available! 11.9.0 -> 12.2.0
+npm notice Changelog: https://github.com/npm/cli/releases/tag/v12.2.0
+npm notice To update run: npm install -g npm@12.2.0
+npm notice
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> house-messenger@0.0.0 lint
+> eslint .
+
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> house-messenger@0.0.0 test
+> vitest run
+
+
+ RUN  v4.1.11 /workspace/scratch/364b78933bbf/ports/messenger
+
+
+ Test Files  23 passed (23)
+      Tests  433 passed (433)
+   Start at  14:20:41
+   Duration  3.23s (transform 2.40s, setup 0ms, import 4.66s, tests 3.48s, environment 10.58s)
+
+npm notice
+npm notice New major version of npm available! 11.9.0 -> 12.2.0
+npm notice Changelog: https://github.com/npm/cli/releases/tag/v12.2.0
+npm notice To update run: npm install -g npm@12.2.0
+npm notice
+{"retainedFiles":76,"identicalFiles":64,"adaptedFiles":["registry/new-york/chat/chat-toolbar.tsx","src/index.css","vendor/serenada-core/src/SerenadaCore.ts","vendor/serenada-core/src/SerenadaSession.ts","vendor/serenada-core/src/configValidation.ts","vendor/serenada-core/src/index.ts","vendor/serenada-core/src/media/MediaEngine.ts","vendor/serenada-core/src/types.ts","vendor/serenada-react-ui/src/SerenadaCallFlow.tsx","vendor/serenada-react-ui/src/hooks/useSerenadaSession.ts","vendor/serenada-react-ui/src/utils/remoteVideoFit.ts","vendor/peerix-picker/media-button.tsx"]}
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> house-messenger@0.0.0 prebuild
+> node scripts/prepare-release.mjs
+
+{"packages":104,"missing":[]}
+
+> house-messenger@0.0.0 build
+> tsc --noEmit && vite build
+
+vite v7.3.7 building client environment for production...
+transforming...
+node_modules/zod/v4/core/util.js (400:0): A comment
+
+"// Wrapped in a `@__PURE__` IIFE: esbuild never tree-shakes a top-level initializer that contains a member access on `Number`, so the bare object literal survived into every bundle."
+
+in "node_modules/zod/v4/core/util.js" contains an annotation that Rollup cannot interpret due to the position of the comment. The comment will be removed to avoid issues.
+node_modules/zod/v4/core/regexes.js (74:0): A comment
+
+"/** Anchors a pattern source. The interpolation lives here rather than at the call site because
+ * esbuild will not drop a `@__PURE__` call whose own argument interpolates a variable, but it
+ * will drop `anchor(dateSource)`. Keeping it inline pinned `date` into every bundle. */"
+
+in "node_modules/zod/v4/core/regexes.js" contains an annotation that Rollup cannot interpret due to the position of the comment. The comment will be removed to avoid issues.
+✓ 1951 modules transformed.
+rendering chunks...
+computing gzip size...
+dist/index.html                   0.39 kB │ gzip:   0.27 kB
+dist/assets/index-DVAeZ2fe.css   56.00 kB │ gzip:  10.33 kB
+dist/assets/index-Byt91Zzx.js   744.05 kB │ gzip: 224.13 kB
+
+(!) Some chunks are larger than 500 kB after minification. Consider:
+- Using dynamic import() to code-split the application
+- Use build.rollupOptions.output.manualChunks to improve chunking: https://rollupjs.org/configuration-options/#output-manualchunks
+- Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+✓ built in 3.08s
+npm notice
+npm notice New major version of npm available! 11.9.0 -> 12.2.0
+npm notice Changelog: https://github.com/npm/cli/releases/tag/v12.2.0
+npm notice To update run: npm install -g npm@12.2.0
+npm notice
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> house-messenger@0.0.0 release:check
+> node scripts/check-release.mjs
+
+JSON Schema, two independent Room samples, and synthetic call/part references accepted. No live Room or audio created.
+{
+  "result": "passed",
+  "files": 8,
+  "bytes": 964567,
+  "mebibytes": 0.92,
+  "references": [
+    "icon.svg",
+    "assets/index-Byt91Zzx.js",
+    "assets/index-DVAeZ2fe.css"
+  ],
+  "sha256": {
+    "LICENSE.txt": "054487bb41dd0fc8ee43538211337c1bd69f61ef72769a23cd358d9e835ab7f6",
+    "THIRD_PARTY_NOTICES.txt": "2cc685e2e23bda7c2a640f06ab362f9ff81784708f269797ee096c8683fc2e44",
+    "app.json": "16e7a39f804883ea82ed71f423d79bffa6fc14dcf98cf370f95fdacf775e8364",
+    "assets/index-Byt91Zzx.js": "b7895736acd85a89d9f54112858ea288834c11252a1b2f6d795e37519b4c9c8d",
+    "assets/index-DVAeZ2fe.css": "487cb04a5c4fe6b9eca4c2134873e1112461b057e26f8987474b8d2b8f6eefb9",
+    "icon.svg": "e5f71f566432d4f8486fdfbd3dc3a38096fc5f06eaacec599f67e7d1d3223e07",
+    "index.html": "0b49af0589f54859fbc752ca64dbeaf677e93c2357d9715b7f00b694d88b16e0",
+    "schema.yaml": "f92e765662282547c5cb360c15f405ee8efab56e511fd5aef454b453852a99a1"
+  },
+  "networkScope": "Static source/entry/CSS/bundle audit. Hosted network capture not yet run.",
+  "browser": "Desktop and 360px hosted checks pending parent",
+  "media": "Synthetic fixtures only; no actual capture or peer call",
+  "publication": "No Room/App created; no release branch, push or publication"
+}

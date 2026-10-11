@@ -1,0 +1,15 @@
+{
+  "entry": "index.html",
+  "room_slots": [
+    {
+      "name": "messenger",
+      "access": "write",
+      "types": [
+        "messenger_chat",
+        "messenger_message",
+        "messenger_call",
+        "messenger_call_part"
+      ]
+    }
+  ]
+}

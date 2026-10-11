@@ -1,0 +1,689 @@
+{
+  "donors": [
+    {
+      "repository": "https://github.com/leonickson1/chatcn",
+      "commit": "a7be5c3aedebed3441594ce8f532acc168c1628c",
+      "license": "MIT",
+      "scope": "Actual rail/header, bubble/date/reply/thread/composer code and themes; Room adapter replaces donor demo authority"
+    },
+    {
+      "repository": "https://github.com/Mesailor/shadcn-chat",
+      "commit": "25daf263eaea42d125c942a80e2ed03cc72b3fe2",
+      "license": "MIT"
+    },
+    {
+      "repository": "https://github.com/agatx/serenada",
+      "commit": "8ce3de95d8fc7db81322381270fd251efd4c9134",
+      "license": "BSD-3-Clause root grant retained"
+    },
+    {
+      "repository": "https://github.com/meefik/peerix-talk",
+      "commit": "f2592faee6ecf33916767c386c27af9aafba2dac",
+      "license": "MIT",
+      "scope": "Picker only, no Peerix library"
+    }
+  ],
+  "retainedFiles": 80,
+  "identicalFiles": 64,
+  "adaptedFiles": [
+    "src/App.tsx",
+    "src/chatcn/layouts.tsx",
+    "src/chatcn/chat.tsx",
+    "src/chatcn/chat.css",
+    "registry/new-york/chat/chat-toolbar.tsx",
+    "src/index.css",
+    "vendor/serenada-core/src/SerenadaCore.ts",
+    "vendor/serenada-core/src/SerenadaSession.ts",
+    "vendor/serenada-core/src/configValidation.ts",
+    "vendor/serenada-core/src/index.ts",
+    "vendor/serenada-core/src/media/MediaEngine.ts",
+    "vendor/serenada-core/src/types.ts",
+    "vendor/serenada-react-ui/src/SerenadaCallFlow.tsx",
+    "vendor/serenada-react-ui/src/hooks/useSerenadaSession.ts",
+    "vendor/serenada-react-ui/src/utils/remoteVideoFit.ts",
+    "vendor/peerix-picker/media-button.tsx"
+  ],
+  "entries": [
+    {
+      "path": "src/App.tsx",
+      "donorPath": "research/chatcn-original/src/components/ui/chat/layouts.tsx",
+      "originalSha256": "6cf3f67bb8629c7f812b00859dcc40f6b576ec11f06076f69015e38afbdbe3da",
+      "retainedSha256": "371aaa46add140d057752113781a5d19e564cc175fc4547819502b11a2092e59",
+      "status": "adapted",
+      "bytes": 24186
+    },
+    {
+      "path": "src/chatcn/layouts.tsx",
+      "donorPath": "research/chatcn-original/src/components/ui/chat/layouts.tsx",
+      "originalSha256": "6cf3f67bb8629c7f812b00859dcc40f6b576ec11f06076f69015e38afbdbe3da",
+      "retainedSha256": "e46dcc5b77ecc3352fd740a69ad1378e8a267248d7eee3b9f12c074de7449691",
+      "status": "adapted",
+      "bytes": 3359
+    },
+    {
+      "path": "src/chatcn/chat.tsx",
+      "donorPath": "research/chatcn-original/src/components/ui/chat/chat.tsx",
+      "originalSha256": "6589b29b481945ce36273a3c2661bafd755a66462660b97058164bf2272a0ffc",
+      "retainedSha256": "b0dc87b71184c758906f08fe458aa540b41582869e35d7872595363ae0dc2a68",
+      "status": "adapted",
+      "bytes": 16822
+    },
+    {
+      "path": "src/chatcn/chat.css",
+      "donorPath": "research/chatcn-original/src/app/globals.css",
+      "originalSha256": "d6fd563a4216268bb687514b86724a1bcb2a7537f1ea5f69ad783ec4242f5b8f",
+      "retainedSha256": "7eec2290ffa0b6a5aa781f53cdaf1b23ce783d271aa99e8b2c778ac4d08426c4",
+      "status": "adapted",
+      "bytes": 14229
+    },
+    {
+      "path": "registry/new-york/chat/chat-event.tsx",
+      "donorPath": "../messenger-chat-donor/registry/new-york/chat/chat-event.tsx",
+      "originalSha256": "9e7de24add3931d2a1b8c85c014bfaa142a8ab5ba6e5355e480e6f8ccafe471a",
+      "retainedSha256": "9e7de24add3931d2a1b8c85c014bfaa142a8ab5ba6e5355e480e6f8ccafe471a",
+      "status": "identical",
+      "bytes": 13631
+    },
+    {
+      "path": "registry/new-york/chat/chat-header.tsx",
+      "donorPath": "../messenger-chat-donor/registry/new-york/chat/chat-header.tsx",
+      "originalSha256": "2dac4416f236f48c2beec1b81f70f388ad1176317136d65e4d2730288ca7313a",
+      "retainedSha256": "2dac4416f236f48c2beec1b81f70f388ad1176317136d65e4d2730288ca7313a",
+      "status": "identical",
+      "bytes": 5310
+    },
+    {
+      "path": "registry/new-york/chat/chat-messages.tsx",
+      "donorPath": "../messenger-chat-donor/registry/new-york/chat/chat-messages.tsx",
+      "originalSha256": "bb00d16ea8cf51fc6d2f71d69be63a6bfb8e9e16fe727565083fdbe6d599bfee",
+      "retainedSha256": "bb00d16ea8cf51fc6d2f71d69be63a6bfb8e9e16fe727565083fdbe6d599bfee",
+      "status": "identical",
+      "bytes": 1888
+    },
+    {
+      "path": "registry/new-york/chat/chat-toolbar.tsx",
+      "donorPath": "../messenger-chat-donor/registry/new-york/chat/chat-toolbar.tsx",
+      "originalSha256": "cd93ecbca6929b403d1c6174a8a37db407e3dba0a1f97232879161a126d4d5fb",
+      "retainedSha256": "76c23bfe653d8eeb83d173a6ede84e847310481ff07a73d65a165f1fe54b7a85",
+      "status": "adapted",
+      "bytes": 9968
+    },
+    {
+      "path": "registry/new-york/chat/chat.tsx",
+      "donorPath": "../messenger-chat-donor/registry/new-york/chat/chat.tsx",
+      "originalSha256": "750c7fb8ef00ea60f04de6e62c3b4f73894eb0abbba0ddb1f3cb75baa9fef3eb",
+      "retainedSha256": "750c7fb8ef00ea60f04de6e62c3b4f73894eb0abbba0ddb1f3cb75baa9fef3eb",
+      "status": "identical",
+      "bytes": 1534
+    },
+    {
+      "path": "registry/new-york/ui/avatar.tsx",
+      "donorPath": "../messenger-chat-donor/registry/new-york/ui/avatar.tsx",
+      "originalSha256": "e8672934f1c315f36cdae39380454ba8c2da62aca420dfb827d96693091419c4",
+      "retainedSha256": "e8672934f1c315f36cdae39380454ba8c2da62aca420dfb827d96693091419c4",
+      "status": "identical",
+      "bytes": 1097
+    },
+    {
+      "path": "registry/new-york/ui/button.tsx",
+      "donorPath": "../messenger-chat-donor/registry/new-york/ui/button.tsx",
+      "originalSha256": "8116b8529db6dc4e3c04bd5ebdd223a38535dcc737830d12ec4b290433d469d8",
+      "retainedSha256": "8116b8529db6dc4e3c04bd5ebdd223a38535dcc737830d12ec4b290433d469d8",
+      "status": "identical",
+      "bytes": 2142
+    },
+    {
+      "path": "registry/new-york/ui/textarea.tsx",
+      "donorPath": "../messenger-chat-donor/registry/new-york/ui/textarea.tsx",
+      "originalSha256": "de4e9fb0fd8e8ed10ea2e475ffe202a922ffe77e3f3edb2c517b0781447ad1b4",
+      "retainedSha256": "de4e9fb0fd8e8ed10ea2e475ffe202a922ffe77e3f3edb2c517b0781447ad1b4",
+      "status": "identical",
+      "bytes": 759
+    },
+    {
+      "path": "src/components/ui/alert-dialog.tsx",
+      "donorPath": "../messenger-chat-donor/src/components/ui/alert-dialog.tsx",
+      "originalSha256": "9a8d950f2b9b4352d5ebb762fb44d5c28c2d353aa29712071973656a8736e311",
+      "retainedSha256": "9a8d950f2b9b4352d5ebb762fb44d5c28c2d353aa29712071973656a8736e311",
+      "status": "identical",
+      "bytes": 5439
+    },
+    {
+      "path": "src/components/ui/avatar.tsx",
+      "donorPath": "../messenger-chat-donor/src/components/ui/avatar.tsx",
+      "originalSha256": "e8672934f1c315f36cdae39380454ba8c2da62aca420dfb827d96693091419c4",
+      "retainedSha256": "e8672934f1c315f36cdae39380454ba8c2da62aca420dfb827d96693091419c4",
+      "status": "identical",
+      "bytes": 1097
+    },
+    {
+      "path": "src/components/ui/badge.tsx",
+      "donorPath": "../messenger-chat-donor/src/components/ui/badge.tsx",
+      "originalSha256": "46a0de5224f6a5d5d63d45246534288518dce888f031064bff925bbc7fe6ad97",
+      "retainedSha256": "46a0de5224f6a5d5d63d45246534288518dce888f031064bff925bbc7fe6ad97",
+      "status": "identical",
+      "bytes": 1776
+    },
+    {
+      "path": "src/components/ui/button-group.tsx",
+      "donorPath": "../messenger-chat-donor/src/components/ui/button-group.tsx",
+      "originalSha256": "ccbf09097f5ebf2eec86f1a96cb92e8dd39d251ebb5867394196c8b4fec68a5c",
+      "retainedSha256": "ccbf09097f5ebf2eec86f1a96cb92e8dd39d251ebb5867394196c8b4fec68a5c",
+      "status": "identical",
+      "bytes": 2209
+    },
+    {
+      "path": "src/components/ui/button.tsx",
+      "donorPath": "../messenger-chat-donor/src/components/ui/button.tsx",
+      "originalSha256": "8116b8529db6dc4e3c04bd5ebdd223a38535dcc737830d12ec4b290433d469d8",
+      "retainedSha256": "8116b8529db6dc4e3c04bd5ebdd223a38535dcc737830d12ec4b290433d469d8",
+      "status": "identical",
+      "bytes": 2142
+    },
+    {
+      "path": "src/components/ui/collapsible.tsx",
+      "donorPath": "../messenger-chat-donor/src/components/ui/collapsible.tsx",
+      "originalSha256": "c2c74dc3e99482d00a57de673b56920860c2ff4b330373d783843f505dc11dae",
+      "retainedSha256": "c2c74dc3e99482d00a57de673b56920860c2ff4b330373d783843f505dc11dae",
+      "status": "identical",
+      "bytes": 800
+    },
+    {
+      "path": "src/components/ui/dialog.tsx",
+      "donorPath": "../messenger-chat-donor/src/components/ui/dialog.tsx",
+      "originalSha256": "dce39c6adc47d997bd2567f8b7a72f466b0134715105cd42f9194007b8ecdb14",
+      "retainedSha256": "dce39c6adc47d997bd2567f8b7a72f466b0134715105cd42f9194007b8ecdb14",
+      "status": "identical",
+      "bytes": 4303
+    },
+    {
+      "path": "src/components/ui/dropdown-menu.tsx",
+      "donorPath": "../messenger-chat-donor/src/components/ui/dropdown-menu.tsx",
+      "originalSha256": "ffb9c65aa6e23010d31b002c564817260849e82593ef8fa474a510a7ed9f9abf",
+      "retainedSha256": "ffb9c65aa6e23010d31b002c564817260849e82593ef8fa474a510a7ed9f9abf",
+      "status": "identical",
+      "bytes": 9002
+    },
+    {
+      "path": "src/components/ui/input-group.tsx",
+      "donorPath": "../messenger-chat-donor/src/components/ui/input-group.tsx",
+      "originalSha256": "c0df02569e483db8ee86bd51b3b392a1ba62b276604d8c7ea90a9efc5faa9e25",
+      "retainedSha256": "c0df02569e483db8ee86bd51b3b392a1ba62b276604d8c7ea90a9efc5faa9e25",
+      "status": "identical",
+      "bytes": 5065
+    },
+    {
+      "path": "src/components/ui/input.tsx",
+      "donorPath": "../messenger-chat-donor/src/components/ui/input.tsx",
+      "originalSha256": "56b7fd30208addbcc2468cfda4f5bc0a55342211deaab61ee35b1c352b1622f1",
+      "retainedSha256": "56b7fd30208addbcc2468cfda4f5bc0a55342211deaab61ee35b1c352b1622f1",
+      "status": "identical",
+      "bytes": 962
+    },
+    {
+      "path": "src/components/ui/label.tsx",
+      "donorPath": "../messenger-chat-donor/src/components/ui/label.tsx",
+      "originalSha256": "9ec42c8a57e82311118b794318409ee02b2cebfa49ba6cce8457cff6448cd471",
+      "retainedSha256": "9ec42c8a57e82311118b794318409ee02b2cebfa49ba6cce8457cff6448cd471",
+      "status": "identical",
+      "bytes": 611
+    },
+    {
+      "path": "src/components/ui/popover.tsx",
+      "donorPath": "../messenger-chat-donor/src/components/ui/popover.tsx",
+      "originalSha256": "31c350309ff5d3034e6ecf1b0eda75ba8855bdbf987fc7ad6d71f0ef07c5a447",
+      "retainedSha256": "31c350309ff5d3034e6ecf1b0eda75ba8855bdbf987fc7ad6d71f0ef07c5a447",
+      "status": "identical",
+      "bytes": 2357
+    },
+    {
+      "path": "src/components/ui/separator.tsx",
+      "donorPath": "../messenger-chat-donor/src/components/ui/separator.tsx",
+      "originalSha256": "e9dddbd8dbbc0eccd683306481b0f0bbc8e2b60ea97817416ebb9fe7fbbbdca8",
+      "retainedSha256": "e9dddbd8dbbc0eccd683306481b0f0bbc8e2b60ea97817416ebb9fe7fbbbdca8",
+      "status": "identical",
+      "bytes": 699
+    },
+    {
+      "path": "src/components/ui/switch.tsx",
+      "donorPath": "../messenger-chat-donor/src/components/ui/switch.tsx",
+      "originalSha256": "17f2390d98e8ce4d9e90155eac1918266914d6a9ada7c276b5d1c917cef0e969",
+      "retainedSha256": "17f2390d98e8ce4d9e90155eac1918266914d6a9ada7c276b5d1c917cef0e969",
+      "status": "identical",
+      "bytes": 1177
+    },
+    {
+      "path": "src/components/ui/textarea.tsx",
+      "donorPath": "../messenger-chat-donor/src/components/ui/textarea.tsx",
+      "originalSha256": "de4e9fb0fd8e8ed10ea2e475ffe202a922ffe77e3f3edb2c517b0781447ad1b4",
+      "retainedSha256": "de4e9fb0fd8e8ed10ea2e475ffe202a922ffe77e3f3edb2c517b0781447ad1b4",
+      "status": "identical",
+      "bytes": 759
+    },
+    {
+      "path": "src/components/ui/tooltip.tsx",
+      "donorPath": "../messenger-chat-donor/src/components/ui/tooltip.tsx",
+      "originalSha256": "cbc12f4086448f8a307ed5fbb160f79467c84a44c48ca0dbd2c62e39a2db6f5d",
+      "retainedSha256": "cbc12f4086448f8a307ed5fbb160f79467c84a44c48ca0dbd2c62e39a2db6f5d",
+      "status": "identical",
+      "bytes": 1892
+    },
+    {
+      "path": "src/components/ui/typography.tsx",
+      "donorPath": "../messenger-chat-donor/src/components/ui/typography.tsx",
+      "originalSha256": "1122e35117ee443c8a4928207bacb877a7b2ec16088e25afe472ad9d4f54332a",
+      "retainedSha256": "1122e35117ee443c8a4928207bacb877a7b2ec16088e25afe472ad9d4f54332a",
+      "status": "identical",
+      "bytes": 686
+    },
+    {
+      "path": "src/lib/utils.ts",
+      "donorPath": "../messenger-chat-donor/src/lib/utils.ts",
+      "originalSha256": "7c8c3dfc0cdd370d44932828eb067ef771c8fe7996693221d5d4b90af6d54f2d",
+      "retainedSha256": "7c8c3dfc0cdd370d44932828eb067ef771c8fe7996693221d5d4b90af6d54f2d",
+      "status": "identical",
+      "bytes": 166
+    },
+    {
+      "path": "src/hooks/use-mobile.ts",
+      "donorPath": "../messenger-chat-donor/src/hooks/use-mobile.ts",
+      "originalSha256": "ad0936f84f1df79d3697bfbff9c18f8ad58431c1cbaf2359c6a853b0fcc9f28b",
+      "retainedSha256": "ad0936f84f1df79d3697bfbff9c18f8ad58431c1cbaf2359c6a853b0fcc9f28b",
+      "status": "identical",
+      "bytes": 565
+    },
+    {
+      "path": "src/index.css",
+      "donorPath": "../messenger-chat-donor/src/app/globals.css",
+      "originalSha256": "9f721ac68d8c023032c047acf17b0530added365a314f334af90e71fdf7ef3fc",
+      "retainedSha256": "e27c3135392f46ae7123da041b0606143b791db8ae0ed91e6f1937296f2b8aca",
+      "status": "adapted",
+      "bytes": 8783
+    },
+    {
+      "path": "vendor/serenada-core/src/ConsoleLogger.ts",
+      "donorPath": "../messenger-call-donor/client/packages/core/src/ConsoleLogger.ts",
+      "originalSha256": "17cf7387709fa1a7205f7e62da53c1b9ed5f9ec19ee12718a06918d49886b0f6",
+      "retainedSha256": "17cf7387709fa1a7205f7e62da53c1b9ed5f9ec19ee12718a06918d49886b0f6",
+      "status": "identical",
+      "bytes": 644
+    },
+    {
+      "path": "vendor/serenada-core/src/SerenadaCore.ts",
+      "donorPath": "../messenger-call-donor/client/packages/core/src/SerenadaCore.ts",
+      "originalSha256": "170d696024abc9df2acf8563629da9231f12eeb3988467475019216883c5c5fc",
+      "retainedSha256": "78b0abe5fc586ea2e6972e11ba862fac64fdab96d2bfedcd94c7ca3a32eac0e0",
+      "status": "adapted",
+      "bytes": 901
+    },
+    {
+      "path": "vendor/serenada-core/src/SerenadaSession.ts",
+      "donorPath": "../messenger-call-donor/client/packages/core/src/SerenadaSession.ts",
+      "originalSha256": "a4895d95cf423c2ad7d031d37ef14e42339d539437fa0ee5ff586da4673764b1",
+      "retainedSha256": "21fc9737606a85bce9c5e7047369173cae2f7877dfe994c5f24e8b9e6524513f",
+      "status": "adapted",
+      "bytes": 73162
+    },
+    {
+      "path": "vendor/serenada-core/src/SignalingProvider.ts",
+      "donorPath": "../messenger-call-donor/client/packages/core/src/SignalingProvider.ts",
+      "originalSha256": "7e40b0c073e6725e064daa35bf8a6ef0db3d03412ad05a0b839ea8317d79b4e0",
+      "retainedSha256": "7e40b0c073e6725e064daa35bf8a6ef0db3d03412ad05a0b839ea8317d79b4e0",
+      "status": "identical",
+      "bytes": 7470
+    },
+    {
+      "path": "vendor/serenada-core/src/cameraModes.ts",
+      "donorPath": "../messenger-call-donor/client/packages/core/src/cameraModes.ts",
+      "originalSha256": "6fb59e399c0bbad5628ff88e5eb983dfb634e32ec8d5bc3c769092f24d3e8c8f",
+      "retainedSha256": "6fb59e399c0bbad5628ff88e5eb983dfb634e32ec8d5bc3c769092f24d3e8c8f",
+      "status": "identical",
+      "bytes": 1448
+    },
+    {
+      "path": "vendor/serenada-core/src/configValidation.ts",
+      "donorPath": "../messenger-call-donor/client/packages/core/src/configValidation.ts",
+      "originalSha256": "9ea63c73973ced54c505c37fea2e3b018981570265a91b6cbe426942f1b9b28c",
+      "retainedSha256": "4e5e468de78575abd59a6cce41e308b1c57bba44a69e300df5f7ca281cc977f0",
+      "status": "adapted",
+      "bytes": 676
+    },
+    {
+      "path": "vendor/serenada-core/src/constants.ts",
+      "donorPath": "../messenger-call-donor/client/packages/core/src/constants.ts",
+      "originalSha256": "e74a68e14ca7e56331eaebc5f08892f00f5b0a22ef66911d7fa8bfddef1de9b4",
+      "retainedSha256": "e74a68e14ca7e56331eaebc5f08892f00f5b0a22ef66911d7fa8bfddef1de9b4",
+      "status": "identical",
+      "bytes": 3189
+    },
+    {
+      "path": "vendor/serenada-core/src/formatError.ts",
+      "donorPath": "../messenger-call-donor/client/packages/core/src/formatError.ts",
+      "originalSha256": "c8824608c871e874c76d01179c70749d3ac3d0bd0a3eaa9d0927bdec25799adb",
+      "retainedSha256": "c8824608c871e874c76d01179c70749d3ac3d0bd0a3eaa9d0927bdec25799adb",
+      "status": "identical",
+      "bytes": 210
+    },
+    {
+      "path": "vendor/serenada-core/src/iceServers.ts",
+      "donorPath": "../messenger-call-donor/client/packages/core/src/iceServers.ts",
+      "originalSha256": "023f708f014983dbe7b97ea8e4b89d41f64670fae340263398a6dacc9e3d4a98",
+      "retainedSha256": "023f708f014983dbe7b97ea8e4b89d41f64670fae340263398a6dacc9e3d4a98",
+      "status": "identical",
+      "bytes": 734
+    },
+    {
+      "path": "vendor/serenada-core/src/index.ts",
+      "donorPath": "../messenger-call-donor/client/packages/core/src/index.ts",
+      "originalSha256": "16656b990dc9518017fcc0ef1db78ef1b18ee8fa9c5f096fb6ca6dd36b64fbb5",
+      "retainedSha256": "14cf56fa9dcbb37f87e977fbe27e692bafe8648c2f6b1300e7c0de72e69b69e2",
+      "status": "adapted",
+      "bytes": 796
+    },
+    {
+      "path": "vendor/serenada-core/src/layout/computeLayout.ts",
+      "donorPath": "../messenger-call-donor/client/packages/core/src/layout/computeLayout.ts",
+      "originalSha256": "1a23c7b2313597663f2e2fe3e12457a04c8ac2e268f63d05c476ad9571cca630",
+      "retainedSha256": "1a23c7b2313597663f2e2fe3e12457a04c8ac2e268f63d05c476ad9571cca630",
+      "status": "identical",
+      "bytes": 22469
+    },
+    {
+      "path": "vendor/serenada-core/src/media/AudioLevelMonitor.ts",
+      "donorPath": "../messenger-call-donor/client/packages/core/src/media/AudioLevelMonitor.ts",
+      "originalSha256": "fbeb4e0c058600e7150f54f0e907d60990b21f4d95887b0b6a89944f54b7cb32",
+      "retainedSha256": "fbeb4e0c058600e7150f54f0e907d60990b21f4d95887b0b6a89944f54b7cb32",
+      "status": "identical",
+      "bytes": 7922
+    },
+    {
+      "path": "vendor/serenada-core/src/media/CallQualityTracker.ts",
+      "donorPath": "../messenger-call-donor/client/packages/core/src/media/CallQualityTracker.ts",
+      "originalSha256": "b9bd667e116b56df9893836a44de40f3e28dc2ba7c967b7433b37e0fbb88ca76",
+      "retainedSha256": "b9bd667e116b56df9893836a44de40f3e28dc2ba7c967b7433b37e0fbb88ca76",
+      "status": "identical",
+      "bytes": 10253
+    },
+    {
+      "path": "vendor/serenada-core/src/media/MediaEngine.ts",
+      "donorPath": "../messenger-call-donor/client/packages/core/src/media/MediaEngine.ts",
+      "originalSha256": "21a4bfb8e939cdb99780440a52a48ecbc378803831272dc68fc1ee3133fca01b",
+      "retainedSha256": "84ce5c9fdf101e209d5fa44baf98cf343e9c7b23317a4694473b86ec69e51f7a",
+      "status": "adapted",
+      "bytes": 154616
+    },
+    {
+      "path": "vendor/serenada-core/src/media/callStats.ts",
+      "donorPath": "../messenger-call-donor/client/packages/core/src/media/callStats.ts",
+      "originalSha256": "3ccccb8bd6a37e6eceb9a1ae8e7d23ba56361fab1198860da1255bf97a655f70",
+      "retainedSha256": "3ccccb8bd6a37e6eceb9a1ae8e7d23ba56361fab1198860da1255bf97a655f70",
+      "status": "identical",
+      "bytes": 20770
+    },
+    {
+      "path": "vendor/serenada-core/src/media/captureSnapshot.ts",
+      "donorPath": "../messenger-call-donor/client/packages/core/src/media/captureSnapshot.ts",
+      "originalSha256": "73c4cfcea2e5291e7c3463592c73d65b18206509c9c42cf24ae983410128d833",
+      "retainedSha256": "73c4cfcea2e5291e7c3463592c73d65b18206509c9c42cf24ae983410128d833",
+      "status": "identical",
+      "bytes": 9146
+    },
+    {
+      "path": "vendor/serenada-core/src/media/localVideoRecovery.ts",
+      "donorPath": "../messenger-call-donor/client/packages/core/src/media/localVideoRecovery.ts",
+      "originalSha256": "ed443b64dca2c65ad5508767b197cf3351ee142be2f0171e6fb3742188999d3f",
+      "retainedSha256": "ed443b64dca2c65ad5508767b197cf3351ee142be2f0171e6fb3742188999d3f",
+      "status": "identical",
+      "bytes": 1065
+    },
+    {
+      "path": "vendor/serenada-core/src/media/mos.ts",
+      "donorPath": "../messenger-call-donor/client/packages/core/src/media/mos.ts",
+      "originalSha256": "12d5b926a71e9655e050815eb705adc9983eaec1418936107473f8912d1d93da",
+      "retainedSha256": "12d5b926a71e9655e050815eb705adc9983eaec1418936107473f8912d1d93da",
+      "status": "identical",
+      "bytes": 1417
+    },
+    {
+      "path": "vendor/serenada-core/src/media/opusDtxSdp.ts",
+      "donorPath": "../messenger-call-donor/client/packages/core/src/media/opusDtxSdp.ts",
+      "originalSha256": "f5ea7cc4e9a1e694840626643376153e73cbc81b9fd89b647f6444904927cc30",
+      "retainedSha256": "f5ea7cc4e9a1e694840626643376153e73cbc81b9fd89b647f6444904927cc30",
+      "status": "identical",
+      "bytes": 2480
+    },
+    {
+      "path": "vendor/serenada-core/src/media/reconnectReason.ts",
+      "donorPath": "../messenger-call-donor/client/packages/core/src/media/reconnectReason.ts",
+      "originalSha256": "4b87cdf073648768ce805ae1ec8625d5454b6be952aac381f80b21c91c63eac3",
+      "retainedSha256": "4b87cdf073648768ce805ae1ec8625d5454b6be952aac381f80b21c91c63eac3",
+      "status": "identical",
+      "bytes": 1920
+    },
+    {
+      "path": "vendor/serenada-core/src/media/streamingMedian.ts",
+      "donorPath": "../messenger-call-donor/client/packages/core/src/media/streamingMedian.ts",
+      "originalSha256": "843f6d7b37a1189ef81aebc7df73e1d0b928d82daee7d5832db8337fe400816e",
+      "retainedSha256": "843f6d7b37a1189ef81aebc7df73e1d0b928d82daee7d5832db8337fe400816e",
+      "status": "identical",
+      "bytes": 3615
+    },
+    {
+      "path": "vendor/serenada-core/src/signaling/payloads.ts",
+      "donorPath": "../messenger-call-donor/client/packages/core/src/signaling/payloads.ts",
+      "originalSha256": "bd6e1293979c2da971bb234c4dd4961cece9f388cffa26b547cf031a366b6b50",
+      "retainedSha256": "bd6e1293979c2da971bb234c4dd4961cece9f388cffa26b547cf031a366b6b50",
+      "status": "identical",
+      "bytes": 11200
+    },
+    {
+      "path": "vendor/serenada-core/src/signaling/protocolConstants.ts",
+      "donorPath": "../messenger-call-donor/client/packages/core/src/signaling/protocolConstants.ts",
+      "originalSha256": "c8546855157692d2c1ca5e0eefe4784a2ca7d77c64991049a99a759189382f2d",
+      "retainedSha256": "c8546855157692d2c1ca5e0eefe4784a2ca7d77c64991049a99a759189382f2d",
+      "status": "identical",
+      "bytes": 199
+    },
+    {
+      "path": "vendor/serenada-core/src/signaling/roomStatuses.ts",
+      "donorPath": "../messenger-call-donor/client/packages/core/src/signaling/roomStatuses.ts",
+      "originalSha256": "d68a35e00677fd57126bcc61785a4561bb9e118cc23988b1dac3c379fbfd4704",
+      "retainedSha256": "d68a35e00677fd57126bcc61785a4561bb9e118cc23988b1dac3c379fbfd4704",
+      "status": "identical",
+      "bytes": 2622
+    },
+    {
+      "path": "vendor/serenada-core/src/signaling/transportConfig.ts",
+      "donorPath": "../messenger-call-donor/client/packages/core/src/signaling/transportConfig.ts",
+      "originalSha256": "ca29a278f47b746bc8938d5c5b9345555e2be1ac928cbabf17f2ee74c2b91328",
+      "retainedSha256": "ca29a278f47b746bc8938d5c5b9345555e2be1ac928cbabf17f2ee74c2b91328",
+      "status": "identical",
+      "bytes": 867
+    },
+    {
+      "path": "vendor/serenada-core/src/signaling/transports/types.ts",
+      "donorPath": "../messenger-call-donor/client/packages/core/src/signaling/transports/types.ts",
+      "originalSha256": "cd5df16ef313a3c54d14960d0cb580f04cafe5bf7ae6d760f0b03560ff802643",
+      "retainedSha256": "cd5df16ef313a3c54d14960d0cb580f04cafe5bf7ae6d760f0b03560ff802643",
+      "status": "identical",
+      "bytes": 520
+    },
+    {
+      "path": "vendor/serenada-core/src/signaling/types.ts",
+      "donorPath": "../messenger-call-donor/client/packages/core/src/signaling/types.ts",
+      "originalSha256": "6ec75b35d948af0e3e168fa2caebc03c47a159745b346d729ed2b350f6c6c779",
+      "retainedSha256": "6ec75b35d948af0e3e168fa2caebc03c47a159745b346d729ed2b350f6c6c779",
+      "status": "identical",
+      "bytes": 3328
+    },
+    {
+      "path": "vendor/serenada-core/src/types.ts",
+      "donorPath": "../messenger-call-donor/client/packages/core/src/types.ts",
+      "originalSha256": "4a01e157d91f1c5a41a2b7594c260199ad27845b74a0dd928d81c7b0efcedad0",
+      "retainedSha256": "e0293afc52d3681c425ba66a203a169637f239cca1716c0c07b97029a2cb8981",
+      "status": "adapted",
+      "bytes": 22838
+    },
+    {
+      "path": "vendor/serenada-react-ui/src/SerenadaCallFlow.tsx",
+      "donorPath": "../messenger-call-donor/client/packages/react-ui/src/SerenadaCallFlow.tsx",
+      "originalSha256": "66273181d3a2896ad5fbc58fa8e64f3f85ea0e928ac3b317f7861759adf262f1",
+      "retainedSha256": "f698cfe0b25e185991c84fde773744c98ffff81a83fb0b50113d38994efb24c9",
+      "status": "adapted",
+      "bytes": 90929
+    },
+    {
+      "path": "vendor/serenada-react-ui/src/SerenadaPermissions.ts",
+      "donorPath": "../messenger-call-donor/client/packages/react-ui/src/SerenadaPermissions.ts",
+      "originalSha256": "aaecc666b1f03f6c7bf18e29fc3cc0915a8a0e53c474399c3a2d1b0b4a025289",
+      "retainedSha256": "aaecc666b1f03f6c7bf18e29fc3cc0915a8a0e53c474399c3a2d1b0b4a025289",
+      "status": "identical",
+      "bytes": 941
+    },
+    {
+      "path": "vendor/serenada-react-ui/src/callFlowStyles.ts",
+      "donorPath": "../messenger-call-donor/client/packages/react-ui/src/callFlowStyles.ts",
+      "originalSha256": "b74de94e8565960da0149d03a98197e1d1d60c31f6f92522d3fcc8e97a8e5fa1",
+      "retainedSha256": "b74de94e8565960da0149d03a98197e1d1d60c31f6f92522d3fcc8e97a8e5fa1",
+      "status": "identical",
+      "bytes": 13452
+    },
+    {
+      "path": "vendor/serenada-react-ui/src/components/AudioActivityIndicator.tsx",
+      "donorPath": "../messenger-call-donor/client/packages/react-ui/src/components/AudioActivityIndicator.tsx",
+      "originalSha256": "2152169de5dbe1a8430c0d02296923c789a6ed406620470e56bef344b3a306c2",
+      "retainedSha256": "2152169de5dbe1a8430c0d02296923c789a6ed406620470e56bef344b3a306c2",
+      "status": "identical",
+      "bytes": 1251
+    },
+    {
+      "path": "vendor/serenada-react-ui/src/components/DebugPanel.tsx",
+      "donorPath": "../messenger-call-donor/client/packages/react-ui/src/components/DebugPanel.tsx",
+      "originalSha256": "dc37b0e8fe1d8080286cded04a4b2d0f4ee1e18a18566ed08f9db0f3bc2c547c",
+      "retainedSha256": "dc37b0e8fe1d8080286cded04a4b2d0f4ee1e18a18566ed08f9db0f3bc2c547c",
+      "status": "identical",
+      "bytes": 13179
+    },
+    {
+      "path": "vendor/serenada-react-ui/src/components/RemoteAvatar.tsx",
+      "donorPath": "../messenger-call-donor/client/packages/react-ui/src/components/RemoteAvatar.tsx",
+      "originalSha256": "027f89620d5531433da6071229b43490523475a7acf1bec3a40bcac2b41f2a6e",
+      "retainedSha256": "027f89620d5531433da6071229b43490523475a7acf1bec3a40bcac2b41f2a6e",
+      "status": "identical",
+      "bytes": 833
+    },
+    {
+      "path": "vendor/serenada-react-ui/src/components/StatusOverlay.tsx",
+      "donorPath": "../messenger-call-donor/client/packages/react-ui/src/components/StatusOverlay.tsx",
+      "originalSha256": "5232c7f9d679378fb30de1df83f73eb73153a0d015c1e2abef12ed0bbcd3f372",
+      "retainedSha256": "5232c7f9d679378fb30de1df83f73eb73153a0d015c1e2abef12ed0bbcd3f372",
+      "status": "identical",
+      "bytes": 1878
+    },
+    {
+      "path": "vendor/serenada-react-ui/src/hooks/constants.ts",
+      "donorPath": "../messenger-call-donor/client/packages/react-ui/src/hooks/constants.ts",
+      "originalSha256": "e2db66a8e5ac0c30224c6921fa8152ea85290f697b33f30a28cf4fa580d6268a",
+      "retainedSha256": "e2db66a8e5ac0c30224c6921fa8152ea85290f697b33f30a28cf4fa580d6268a",
+      "status": "identical",
+      "bytes": 425
+    },
+    {
+      "path": "vendor/serenada-react-ui/src/hooks/useAudioLevel.ts",
+      "donorPath": "../messenger-call-donor/client/packages/react-ui/src/hooks/useAudioLevel.ts",
+      "originalSha256": "71c259f06ab19dea2b3b48cd2ae69d210a67b73387521c27cd8143b83e5cacde",
+      "retainedSha256": "71c259f06ab19dea2b3b48cd2ae69d210a67b73387521c27cd8143b83e5cacde",
+      "status": "identical",
+      "bytes": 1329
+    },
+    {
+      "path": "vendor/serenada-react-ui/src/hooks/useAvatarResolver.ts",
+      "donorPath": "../messenger-call-donor/client/packages/react-ui/src/hooks/useAvatarResolver.ts",
+      "originalSha256": "073ed308099615b8becc73d5e919848134823a3f5bef023c15644aa860c2c428",
+      "retainedSha256": "073ed308099615b8becc73d5e919848134823a3f5bef023c15644aa860c2c428",
+      "status": "identical",
+      "bytes": 3304
+    },
+    {
+      "path": "vendor/serenada-react-ui/src/hooks/useCallState.ts",
+      "donorPath": "../messenger-call-donor/client/packages/react-ui/src/hooks/useCallState.ts",
+      "originalSha256": "360f11174b85b70eac82ea0010c920ac83316049fb07a9f8092798827f28b63b",
+      "retainedSha256": "360f11174b85b70eac82ea0010c920ac83316049fb07a9f8092798827f28b63b",
+      "status": "identical",
+      "bytes": 685
+    },
+    {
+      "path": "vendor/serenada-react-ui/src/hooks/useSerenadaSession.ts",
+      "donorPath": "../messenger-call-donor/client/packages/react-ui/src/hooks/useSerenadaSession.ts",
+      "originalSha256": "c274e87e222d2d32b706d0388747807bb3f42b4d3d5cf7a8fc981db4fde6f222",
+      "retainedSha256": "fabd2f64e50365ff9e536d79ca900954024ec016a741e4f1d366cd942d59ad78",
+      "status": "adapted",
+      "bytes": 1695
+    },
+    {
+      "path": "vendor/serenada-react-ui/src/index.ts",
+      "donorPath": "../messenger-call-donor/client/packages/react-ui/src/index.ts",
+      "originalSha256": "26f78bfad1139adbc54159492ef6e1fb6bc04ce6cd3f078783f34cff82a73332",
+      "retainedSha256": "26f78bfad1139adbc54159492ef6e1fb6bc04ce6cd3f078783f34cff82a73332",
+      "status": "identical",
+      "bytes": 1118
+    },
+    {
+      "path": "vendor/serenada-react-ui/src/types.ts",
+      "donorPath": "../messenger-call-donor/client/packages/react-ui/src/types.ts",
+      "originalSha256": "c4a74de839a4f39691e8631a241394e1e5a0df8955eff100819ae3d5dd9379a7",
+      "retainedSha256": "c4a74de839a4f39691e8631a241394e1e5a0df8955eff100819ae3d5dd9379a7",
+      "status": "identical",
+      "bytes": 8004
+    },
+    {
+      "path": "vendor/serenada-react-ui/src/utils/audio.ts",
+      "donorPath": "../messenger-call-donor/client/packages/react-ui/src/utils/audio.ts",
+      "originalSha256": "565967884aee846e69391d0ea6120564160c5d2f81a1d4a742d35dfeb59e5df4",
+      "retainedSha256": "565967884aee846e69391d0ea6120564160c5d2f81a1d4a742d35dfeb59e5df4",
+      "status": "identical",
+      "bytes": 1290
+    },
+    {
+      "path": "vendor/serenada-react-ui/src/utils/contentRendering.ts",
+      "donorPath": "../messenger-call-donor/client/packages/react-ui/src/utils/contentRendering.ts",
+      "originalSha256": "5438c083202f3bdb084a3cbb3a7bae8e40edc06db40fec397887610739cb7ccd",
+      "retainedSha256": "5438c083202f3bdb084a3cbb3a7bae8e40edc06db40fec397887610739cb7ccd",
+      "status": "identical",
+      "bytes": 27003
+    },
+    {
+      "path": "vendor/serenada-react-ui/src/utils/remoteVideoFit.ts",
+      "donorPath": "../messenger-call-donor/client/packages/react-ui/src/utils/remoteVideoFit.ts",
+      "originalSha256": "d7e5fa6907b29b2d77f3e1a95d3d3813ab9a1e3f9eea4191bb9af81b3bb2d812",
+      "retainedSha256": "52b496c0ffa40124f567cbc49fa384bea35c5948a8fff0dd4f7eb5347269c1e4",
+      "status": "adapted",
+      "bytes": 378
+    },
+    {
+      "path": "vendor/peerix-picker/media-button.tsx",
+      "donorPath": "../messenger-picker-donor/src/components/media-button.tsx",
+      "originalSha256": "c04479394666b36afb867ff4df01b8e1f3e11e07e95e167e6058fd83a8f5230a",
+      "retainedSha256": "8ba576eb95e9b4aca4b577f9a625ea9fe3dff52858b1c93dafd5cc7d547428df",
+      "status": "adapted",
+      "bytes": 8879
+    },
+    {
+      "path": "vendor/peerix-picker/use-media-devices.ts",
+      "donorPath": "../messenger-picker-donor/src/hooks/use-media-devices.ts",
+      "originalSha256": "acb037f0bdac69bf40b6f885213443d8be398fa9b4b74b868b27fd1551dac939",
+      "retainedSha256": "acb037f0bdac69bf40b6f885213443d8be398fa9b4b74b868b27fd1551dac939",
+      "status": "identical",
+      "bytes": 959
+    },
+    {
+      "path": "vendor/peerix-picker/use-audio-analysis.ts",
+      "donorPath": "../messenger-picker-donor/src/hooks/use-audio-analysis.ts",
+      "originalSha256": "e3f59f93cf78942dd3842099bf686cd181659b6b180c73a9804257ad9e2aaa10",
+      "retainedSha256": "e3f59f93cf78942dd3842099bf686cd181659b6b180c73a9804257ad9e2aaa10",
+      "status": "identical",
+      "bytes": 1643
+    }
+  ],
+  "visualAcceptance": "Pending hosted donor-versus-port browser comparison; file fidelity is not a visual pass."
+}

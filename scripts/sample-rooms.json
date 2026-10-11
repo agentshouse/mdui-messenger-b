@@ -1,0 +1,48 @@
+[
+  {
+    "folder": "direct",
+    "files": [
+      "chats/main.md",
+      "messages/351bc618-65f7-5455-8832-9ca81d84d1e6.md",
+      "messages/e2960547-d983-581e-9a44-ff6c2c362594.md",
+      "messages/f0be5acb-431e-5159-8285-c107160c45bb.md",
+      "messages/99488b76-b225-59a3-a410-b26722ddc231.md",
+      "messages/bc8d7e92-2fd1-5c1c-ba20-f82fb72e6ec7.md",
+      "messages/e8c3defb-3467-563b-97a1-777946d67926.md",
+      "messages/5a231b6a-953d-500a-acf9-87628a29cc46.md",
+      "messages/53aac9ee-8141-5258-a1ab-2f5711a20b2d.md",
+      "messages/a77cc945-aa2d-556e-8dd5-b4bdc7629336.md",
+      "messages/fe2b03ab-26cf-5b9a-bf53-e7826367e010.md",
+      "messages/7bb11419-9e2c-5264-9100-242c6d0ee9a5.md",
+      "messages/4766ee39-dbfe-5a38-95e7-7f101cbe3588.md",
+      "messages/9f2cf918-af74-5bce-86e8-f1eb334073de.md",
+      "messages/580254d3-5840-504b-bf38-fe6209bf820b.md",
+      "messages/d863ee87-4bc8-5c7d-b1a9-2616aa936f1a.md",
+      "messages/9d18ec0e-5271-5aa6-a88d-1b13df737cc1.md",
+      "messages/5dc506f3-a56f-5939-84c7-48b643f1afb6.md"
+    ]
+  },
+  {
+    "folder": "group",
+    "files": [
+      "chats/main.md",
+      "messages/9059af21-4dfa-58ee-9960-9eff8e530d14.md",
+      "messages/019f7eaf-3cf6-5c19-b513-b6aa0c0bc342.md",
+      "messages/695637ef-818b-5978-b160-46365b391bde.md",
+      "messages/7da4113b-7df7-57d0-89c0-11ea897f5ac9.md",
+      "messages/ecb81151-9b7f-54e0-ac09-650cf4d3e16b.md",
+      "messages/b0791871-5ad9-5eb1-89f1-04085b085323.md",
+      "messages/b000d3ff-b057-5191-8b3d-2f0fb460d046.md",
+      "messages/f902861a-8136-5dbe-b95f-f6720af7a0d9.md",
+      "messages/0f28e329-4773-55ad-90d5-439e4d6e1343.md",
+      "messages/2c429977-0ddb-5966-bf0c-c2c0a98c3299.md",
+      "messages/047d607a-be3d-5d59-b4ee-a14f590a4166.md",
+      "messages/629b5336-950b-5d5e-9cf7-428f0f8a39c5.md",
+      "messages/474bccc0-8237-50a6-8d69-b2713133f206.md",
+      "messages/dfc22240-320a-5a36-9495-e62f9986b676.md",
+      "messages/0f7168ee-9339-5b37-a532-35acca268531.md",
+      "messages/a4ede990-f7e7-5083-a2de-a2b8b7cebb6c.md",
+      "messages/e594bccf-65a5-5954-9024-62e417bd03bf.md"
+    ]
+  }
+]

@@ -1,0 +1,499 @@
+/* chatcn MIT theme tokens and motion, pinned a7be5c3. */
+/* ═══════════════════════════════════════════════════════════════════════
+   chatcn — Three-Theme System (Lunar / Aurora / Ember)
+   From chatcn-themes.md — all CSS variables per theme
+   Applied via data-chat-theme attribute on ChatProvider wrapper
+   ═══════════════════════════════════════════════════════════════════════ */
+
+/* ─── Shared font stacks (legally clean per themes doc §0) ─────────── */
+:root {
+  --chat-font-sans:
+    system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    "Helvetica Neue", sans-serif;
+  --chat-font-mono:
+    "SF Mono", "JetBrains Mono", "Fira Code", ui-monospace, monospace;
+}
+
+/* ═══ THEME 1: LUNAR (Default) ═══════════════════════════════════════ */
+/* "Calm midnight workspace." — Indigo accent, Zinc neutrals            */
+
+[data-chat-theme="lunar"] {
+  /* Light mode */
+  --chat-bg-app: #fafafa;
+  --chat-bg-sidebar: #f4f4f5;
+  --chat-bg-main: #ffffff;
+  --chat-bg-header: rgba(255, 255, 255, 0.75);
+  --chat-bg-composer: rgba(255, 255, 255, 0.82);
+
+  --chat-bubble-outgoing: #6366f1;
+  --chat-bubble-outgoing-text: #ffffff;
+  --chat-bubble-incoming: #f4f4f5;
+  --chat-bubble-incoming-text: #18181b;
+
+  --chat-accent: #6366f1;
+  --chat-accent-soft: rgba(99, 102, 241, 0.08);
+  --chat-green: #22c55e;
+  --chat-orange: #f59e0b;
+  --chat-red: #ef4444;
+
+  --chat-text-primary: #18181b;
+  --chat-text-secondary: #71717a;
+  --chat-text-tertiary: #a1a1aa;
+  --chat-border: rgba(0, 0, 0, 0.06);
+  --chat-border-strong: rgba(0, 0, 0, 0.1);
+
+  --chat-shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.04);
+  --chat-shadow-md: 0 4px 12px rgba(0, 0, 0, 0.06);
+  --chat-shadow-lg: 0 8px 30px rgba(0, 0, 0, 0.08);
+  --chat-shadow-toolbar: 0 2px 16px rgba(0, 0, 0, 0.12);
+
+  --chat-bubble-radius: 14px;
+  --chat-bubble-radius-grouped: 4px;
+  --chat-input-radius: 20px;
+  --chat-spacing-messages: 14px;
+  --chat-spacing-grouped: 2px;
+
+  --chat-ease: cubic-bezier(0.25, 0.1, 0.25, 1);
+  --chat-duration-fast: 150ms;
+  --chat-duration-normal: 250ms;
+}
+
+/* Lunar Dark */
+.dark [data-chat-theme="lunar"],
+[data-chat-theme="lunar"].dark {
+  --chat-bg-app: #09090b;
+  --chat-bg-sidebar: #18181b;
+  --chat-bg-main: #09090b;
+  --chat-bg-header: rgba(24, 24, 27, 0.75);
+  --chat-bg-composer: rgba(24, 24, 27, 0.82);
+
+  --chat-bubble-outgoing: #818cf8;
+  --chat-bubble-outgoing-text: #ffffff;
+  --chat-bubble-incoming: #27272a;
+  --chat-bubble-incoming-text: #fafafa;
+
+  --chat-accent: #818cf8;
+  --chat-accent-soft: rgba(129, 140, 248, 0.1);
+  --chat-green: #4ade80;
+  --chat-orange: #fbbf24;
+  --chat-red: #f87171;
+
+  --chat-text-primary: #fafafa;
+  --chat-text-secondary: #a1a1aa;
+  --chat-text-tertiary: #52525b;
+  --chat-border: rgba(255, 255, 255, 0.06);
+  --chat-border-strong: rgba(255, 255, 255, 0.1);
+
+  --chat-shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.2);
+  --chat-shadow-md: 0 4px 16px rgba(0, 0, 0, 0.3);
+  --chat-shadow-lg: 0 8px 40px rgba(0, 0, 0, 0.4);
+  --chat-shadow-toolbar: 0 2px 20px rgba(0, 0, 0, 0.4);
+}
+
+/* ═══ THEME 2: AURORA ════════════════════════════════════════════════ */
+/* "Soft morning light." — Teal accent, warm Stone/Ivory tones          */
+
+[data-chat-theme="aurora"] {
+  --chat-bg-app: #fffbf5;
+  --chat-bg-sidebar: #fff8f0;
+  --chat-bg-main: #fffbf5;
+  --chat-bg-header: rgba(255, 251, 245, 0.8);
+  --chat-bg-composer: rgba(255, 251, 245, 0.85);
+
+  /* Aurora uses outlined bubbles — subtle teal wash */
+  --chat-bubble-outgoing: rgba(13, 148, 136, 0.1);
+  --chat-bubble-outgoing-text: #1c1917;
+  --chat-bubble-incoming: rgba(0, 0, 0, 0.05);
+  --chat-bubble-incoming-text: #1c1917;
+
+  --chat-accent: #0d9488;
+  --chat-accent-soft: rgba(13, 148, 136, 0.06);
+  --chat-green: #16a34a;
+  --chat-orange: #ea580c;
+  --chat-red: #dc2626;
+
+  --chat-text-primary: #1c1917;
+  --chat-text-secondary: #78716c;
+  --chat-text-tertiary: #a8a29e;
+  --chat-border: rgba(120, 113, 108, 0.1);
+  --chat-border-strong: rgba(120, 113, 108, 0.18);
+
+  --chat-shadow-sm: 0 1px 2px rgba(120, 113, 108, 0.06);
+  --chat-shadow-md: 0 4px 20px rgba(120, 113, 108, 0.08);
+  --chat-shadow-lg: 0 12px 40px rgba(120, 113, 108, 0.08);
+  --chat-shadow-toolbar: 0 4px 20px rgba(120, 113, 108, 0.1);
+
+  --chat-bubble-radius: 18px;
+  --chat-bubble-radius-grouped: 6px;
+  --chat-input-radius: 24px;
+  --chat-spacing-messages: 16px;
+  --chat-spacing-grouped: 3px;
+
+  --chat-ease: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --chat-duration-fast: 180ms;
+  --chat-duration-normal: 280ms;
+}
+
+/* Aurora Dark */
+.dark [data-chat-theme="aurora"],
+[data-chat-theme="aurora"].dark {
+  --chat-bg-app: #0c0a09;
+  --chat-bg-sidebar: #1c1917;
+  --chat-bg-main: #0c0a09;
+  --chat-bg-header: rgba(28, 25, 23, 0.78);
+  --chat-bg-composer: rgba(28, 25, 23, 0.85);
+
+  --chat-bubble-outgoing: rgba(45, 212, 191, 0.08);
+  --chat-bubble-outgoing-text: #fafaf9;
+  --chat-bubble-incoming: rgba(255, 255, 255, 0.04);
+  --chat-bubble-incoming-text: #fafaf9;
+
+  --chat-accent: #2dd4bf;
+  --chat-accent-soft: rgba(45, 212, 191, 0.08);
+
+  --chat-text-primary: #fafaf9;
+  --chat-text-secondary: #a8a29e;
+  --chat-text-tertiary: #57534e;
+  --chat-border: rgba(255, 255, 255, 0.06);
+  --chat-border-strong: rgba(255, 255, 255, 0.1);
+
+  --chat-shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.2);
+  --chat-shadow-md: 0 4px 16px rgba(0, 0, 0, 0.25);
+  --chat-shadow-lg: 0 8px 40px rgba(0, 0, 0, 0.35);
+  --chat-shadow-toolbar: 0 2px 20px rgba(0, 0, 0, 0.35);
+}
+
+/* Aurora outlined bubble borders — use outline to avoid cascading into child elements */
+[data-chat-theme="aurora"] .chat-bubble {
+  outline: 1.5px solid rgba(13, 148, 136, 0.25);
+  outline-offset: -1.5px;
+}
+.dark [data-chat-theme="aurora"] .chat-bubble,
+[data-chat-theme="aurora"].dark .chat-bubble {
+  outline: 1.5px solid rgba(45, 212, 191, 0.2);
+  outline-offset: -1.5px;
+}
+
+/* ═══ THEME 3: EMBER ═════════════════════════════════════════════════ */
+/* "Dense. Fast. No bullshit." — Orange accent, Slate neutrals, flat    */
+
+[data-chat-theme="ember"] {
+  --chat-bg-app: #ffffff;
+  --chat-bg-sidebar: #f8fafc;
+  --chat-bg-main: #ffffff;
+  --chat-bg-header: #ffffff;
+  --chat-bg-composer: #ffffff;
+
+  /* Ember: subtle background for visual separation */
+  --chat-bubble-outgoing: rgba(249, 115, 22, 0.04);
+  --chat-bubble-outgoing-text: #0f172a;
+  --chat-bubble-incoming: rgba(0, 0, 0, 0.02);
+  --chat-bubble-incoming-text: #0f172a;
+
+  --chat-accent: #f97316;
+  --chat-accent-soft: rgba(249, 115, 22, 0.06);
+  --chat-green: #22c55e;
+  --chat-orange: #f97316;
+  --chat-red: #ef4444;
+
+  --chat-text-primary: #0f172a;
+  --chat-text-secondary: #64748b;
+  --chat-text-tertiary: #94a3b8;
+  --chat-border: #e2e8f0;
+  --chat-border-strong: #cbd5e1;
+
+  --chat-shadow-sm: none;
+  --chat-shadow-md: none;
+  --chat-shadow-lg: none;
+  --chat-shadow-toolbar: none;
+
+  --chat-bubble-radius: 0px;
+  --chat-bubble-radius-grouped: 0px;
+  --chat-input-radius: 8px;
+  --chat-spacing-messages: 8px;
+  --chat-spacing-grouped: 0px;
+
+  --chat-ease: cubic-bezier(0.16, 1, 0.3, 1);
+  --chat-duration-fast: 100ms;
+  --chat-duration-normal: 150ms;
+}
+
+/* Ember Dark */
+.dark [data-chat-theme="ember"],
+[data-chat-theme="ember"].dark {
+  --chat-bg-app: #0b0f19;
+  --chat-bg-sidebar: #111827;
+  --chat-bg-main: #0b0f19;
+  --chat-bg-header: #111827;
+  --chat-bg-composer: #111827;
+
+  --chat-bubble-outgoing: rgba(251, 146, 60, 0.06);
+  --chat-bubble-outgoing-text: #f8fafc;
+  --chat-bubble-incoming: rgba(255, 255, 255, 0.03);
+  --chat-bubble-incoming-text: #f8fafc;
+
+  --chat-accent: #fb923c;
+  --chat-accent-soft: rgba(251, 146, 60, 0.08);
+
+  --chat-text-primary: #f8fafc;
+  --chat-text-secondary: #94a3b8;
+  --chat-text-tertiary: #475569;
+  --chat-border: rgba(255, 255, 255, 0.08);
+  --chat-border-strong: rgba(255, 255, 255, 0.12);
+}
+
+/* Ember flat message style — left border bar instead of bubble */
+[data-chat-theme="ember"] .chat-bubble {
+  border-radius: 0 !important;
+  border-left: 3px solid var(--chat-accent);
+  padding: 6px 16px 6px 12px;
+}
+
+/* Ember: message rows get hover bg for visibility */
+[data-chat-theme="ember"] .chat-message:hover {
+  background: var(--chat-accent-soft);
+  border-radius: 4px;
+}
+
+/* Ember: no frosted glass — solid backgrounds */
+[data-chat-theme="ember"] .chat-composer {
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+}
+
+/* ═══ THEME 4: MIDNIGHT (True OLED Black — Dark Only) ═══════════════ */
+/* "Void. Pure content. Nothing else." — Blue accent, true #000000       */
+
+[data-chat-theme="midnight"] {
+  --chat-bg-app: #000000;
+  --chat-bg-sidebar: #0a0a0a;
+  --chat-bg-main: #000000;
+  --chat-bg-header: rgba(10, 10, 10, 0.8);
+  --chat-bg-composer: rgba(10, 10, 10, 0.85);
+
+  --chat-bubble-outgoing: rgba(59, 130, 246, 0.2);
+  --chat-bubble-outgoing-text: #ffffff;
+  --chat-bubble-incoming: rgba(255, 255, 255, 0.06);
+  --chat-bubble-incoming-text: #e5e5e5;
+
+  --chat-accent: #3b82f6;
+  --chat-accent-soft: rgba(59, 130, 246, 0.1);
+  --chat-green: #22c55e;
+  --chat-orange: #f59e0b;
+  --chat-red: #ef4444;
+
+  --chat-text-primary: #ffffff;
+  --chat-text-secondary: #737373;
+  --chat-text-tertiary: #404040;
+
+  --chat-border: rgba(255, 255, 255, 0.04);
+  --chat-border-strong: rgba(255, 255, 255, 0.08);
+
+  --chat-bg-content-card: #111111;
+  --chat-bg-code: #111111;
+
+  --chat-shadow-sm: none;
+  --chat-shadow-md: none;
+  --chat-shadow-lg: none;
+  --chat-shadow-toolbar: 0 0 0 1px rgba(255, 255, 255, 0.08);
+
+  --chat-bubble-radius: 16px;
+  --chat-bubble-radius-grouped: 4px;
+  --chat-input-radius: 20px;
+  --chat-spacing-messages: 16px;
+  --chat-spacing-grouped: 2px;
+
+  --chat-ease: cubic-bezier(0.25, 0.1, 0.25, 1);
+  --chat-duration-fast: 150ms;
+  --chat-duration-normal: 250ms;
+}
+
+/* Midnight: reaction glow on hover */
+[data-chat-theme="midnight"] .chat-reaction-pop:hover {
+  box-shadow: 0 0 8px rgba(59, 130, 246, 0.15);
+}
+
+/* ─── Content Card Variables (per-theme backgrounds for embedded content) ─── */
+
+/* Lunar */
+[data-chat-theme="lunar"] {
+  --chat-bg-content-card: #f4f4f5;
+  --chat-bg-code: #f4f4f5;
+}
+.dark [data-chat-theme="lunar"],
+[data-chat-theme="lunar"].dark {
+  --chat-bg-content-card: #18181b;
+  --chat-bg-code: #18181b;
+}
+
+/* Aurora */
+[data-chat-theme="aurora"] {
+  --chat-bg-content-card: #ffffff;
+  --chat-bg-code: #f5f0eb;
+}
+.dark [data-chat-theme="aurora"],
+[data-chat-theme="aurora"].dark {
+  --chat-bg-content-card: #1c1917;
+  --chat-bg-code: #1c1917;
+}
+
+/* Aurora content cards need extra definition on light bg */
+[data-chat-theme="aurora"] .chat-content-card {
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
+}
+
+/* Ember */
+[data-chat-theme="ember"] {
+  --chat-bg-content-card: #f8fafc;
+  --chat-bg-code: #f1f5f9;
+}
+.dark [data-chat-theme="ember"],
+[data-chat-theme="ember"].dark {
+  --chat-bg-content-card: #111827;
+  --chat-bg-code: #0f172a;
+}
+
+/* Midnight already defined above */
+
+/* ─── Shared content card class ─────────────────────────────────────── */
+@layer base {
+  .chat-content-card {
+    background: var(--chat-bg-content-card);
+    border: 1px solid var(--chat-border-strong);
+    border-radius: 12px;
+    overflow: hidden;
+  }
+}
+
+/* ─── Drag-and-drop upload overlay ──────────────────────────────────── */
+@layer base {
+  .chat-drop-overlay {
+    position: absolute;
+    inset: 0;
+    z-index: 50;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--chat-accent-soft);
+    border: 2px dashed var(--chat-accent);
+    border-radius: 12px;
+    backdrop-filter: blur(4px);
+  }
+}
+[data-chat-theme="ember"] .chat-drop-overlay {
+  border-radius: 4px;
+}
+
+/* ─── chatcn animations (§7 Animation System) ───────────────────────── */
+
+@keyframes chat-message-enter {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes chat-typing-pulse {
+  0%,
+  60%,
+  100% {
+    opacity: 0.3;
+    transform: scale(1);
+  }
+  30% {
+    opacity: 1;
+    transform: scale(1.15);
+  }
+}
+
+/* Toolbar entrance */
+@keyframes chat-toolbar-enter {
+  from {
+    opacity: 0;
+    transform: scale(0.95) translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+/* Reaction pop */
+@keyframes chat-reaction-pop {
+  0% {
+    transform: scale(0);
+    opacity: 0;
+  }
+  70% {
+    transform: scale(1.1);
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+/* Streaming cursor blink */
+@keyframes chat-cursor-blink {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+  }
+}
+
+/* Read receipt status color transition */
+@keyframes chat-status-read-in {
+  from {
+    color: var(--chat-text-tertiary);
+  }
+  to {
+    color: var(--chat-accent);
+  }
+}
+
+@layer base {
+  .chat-message {
+    animation: chat-message-enter 250ms cubic-bezier(0.25, 0.1, 0.25, 1);
+  }
+
+  .chat-typing-dot {
+    animation: chat-typing-pulse 1.4s ease-in-out infinite;
+  }
+
+  .chat-toolbar-enter {
+    transform-origin: bottom center;
+  }
+
+  .group\/message:hover .chat-toolbar-enter {
+    animation: chat-toolbar-enter 150ms ease-out;
+  }
+
+  .chat-reaction-pop {
+    animation: chat-reaction-pop 200ms cubic-bezier(0.25, 0.1, 0.25, 1);
+  }
+
+  .chat-status-read {
+    animation: chat-status-read-in 400ms ease-out;
+  }
+
+  .chat-streaming-cursor {
+    animation: chat-cursor-blink 1s step-end infinite;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .chat-message,
+  .chat-typing-dot,
+  .chat-toolbar-enter,
+  .chat-reaction-pop,
+  .chat-status-read {
+    animation: none;
+  }
+}
