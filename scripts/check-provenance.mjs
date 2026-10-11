@@ -4,37 +4,37 @@ import { createHash } from "node:crypto";
 import assert from "node:assert/strict";
 const root = path.resolve(import.meta.dirname, "..");
 const mapping = [
-  ["src/App.tsx", "research/chatcn-original/src/components/ui/chat/layouts.tsx"],
-  ["src/chatcn/layouts.tsx", "research/chatcn-original/src/components/ui/chat/layouts.tsx"],
-  ["src/chatcn/chat.tsx", "research/chatcn-original/src/components/ui/chat/chat.tsx"],
-  ["src/chatcn/chat.css", "research/chatcn-original/src/app/globals.css"],
-  ["registry", "../messenger-chat-donor/registry"],
-  ["src/components/ui", "../messenger-chat-donor/src/components/ui"],
-  ["src/lib/utils.ts", "../messenger-chat-donor/src/lib/utils.ts"],
+  ["src/App.tsx", "tests/support/upstream/chatcn-original/src/components/ui/chat/layouts.tsx"],
+  ["src/chatcn/layouts.tsx", "tests/support/upstream/chatcn-original/src/components/ui/chat/layouts.tsx"],
+  ["src/chatcn/chat.tsx", "tests/support/upstream/chatcn-original/src/components/ui/chat/chat.tsx"],
+  ["src/chatcn/chat.css", "tests/support/upstream/chatcn-original/src/app/globals.css"],
+  ["registry", "tests/support/upstream/messenger-chat-donor/registry"],
+  ["src/components/ui", "tests/support/upstream/messenger-chat-donor/src/components/ui"],
+  ["src/lib/utils.ts", "tests/support/upstream/messenger-chat-donor/src/lib/utils.ts"],
   [
     "src/hooks/use-mobile.ts",
-    "../messenger-chat-donor/src/hooks/use-mobile.ts",
+    "tests/support/upstream/messenger-chat-donor/src/hooks/use-mobile.ts",
   ],
-  ["src/index.css", "../messenger-chat-donor/src/app/globals.css"],
+  ["src/index.css", "tests/support/upstream/messenger-chat-donor/src/app/globals.css"],
   [
     "vendor/serenada-core/src",
-    "../messenger-call-donor/client/packages/core/src",
+    "tests/support/upstream/messenger-call-donor/client/packages/core/src",
   ],
   [
     "vendor/serenada-react-ui/src",
-    "../messenger-call-donor/client/packages/react-ui/src",
+    "tests/support/upstream/messenger-call-donor/client/packages/react-ui/src",
   ],
   [
     "vendor/peerix-picker/media-button.tsx",
-    "../messenger-picker-donor/src/components/media-button.tsx",
+    "tests/support/upstream/messenger-picker-donor/src/components/media-button.tsx",
   ],
   [
     "vendor/peerix-picker/use-media-devices.ts",
-    "../messenger-picker-donor/src/hooks/use-media-devices.ts",
+    "tests/support/upstream/messenger-picker-donor/src/hooks/use-media-devices.ts",
   ],
   [
     "vendor/peerix-picker/use-audio-analysis.ts",
-    "../messenger-picker-donor/src/hooks/use-audio-analysis.ts",
+    "tests/support/upstream/messenger-picker-donor/src/hooks/use-audio-analysis.ts",
   ],
 ];
 const files = (dir) =>
@@ -42,13 +42,15 @@ const files = (dir) =>
     ? fs.readdirSync(dir).flatMap((name) => files(path.join(dir, name)))
     : [dir];
 const hash = (bytes) => createHash("sha256").update(bytes).digest("hex");
-const pins = JSON.parse(fs.readFileSync(path.join(root, "reports/chatcn-source-pins.json"), "utf8"));
+const pins = JSON.parse(fs.readFileSync(path.join(root, "tests/support/chatcn-source-pins.json"), "utf8"));
 assert.equal(pins.commit, "a7be5c3aedebed3441594ce8f532acc168c1628c");
 for (const file of pins.files) {
   const bytes = fs.readFileSync(path.join(root, file.local));
   assert.equal(bytes.length, file.size_bytes, file.local);
   assert.equal(hash(bytes), file.sha256, file.local);
 }
+const originalPins = JSON.parse(fs.readFileSync(path.join(root, "tests/support/upstream-pins.json"), "utf8"));
+for (const [file, expected] of Object.entries(originalPins)) assert.equal(hash(fs.readFileSync(path.join(root, file))), expected, file);
 const entries = [];
 for (const [local, donor] of mapping)
   for (const file of files(path.join(root, local))) {
@@ -95,8 +97,9 @@ const report = {
   visualAcceptance:
     "Pending hosted donor-versus-port browser comparison; file fidelity is not a visual pass.",
 };
+fs.mkdirSync(path.join(root, ".verification"), { recursive: true });
 fs.writeFileSync(
-  path.join(root, "reports/source-provenance.json"),
+  path.join(root, ".verification/source-provenance.json"),
   JSON.stringify(report, null, 2) + "\n",
 );
 console.log(

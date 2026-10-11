@@ -13,6 +13,7 @@
     "build": "tsc --noEmit && vite build",
     "release:check": "node scripts/check-release.mjs",
     "notices": "node scripts/generate-notices.mjs",
+    "verify": "npm run typecheck && npm run lint && npm test -- --maxWorkers=2 && node scripts/check-schema.mjs && node scripts/check-provenance.mjs && npm run notices && npm run build && npm run release:check",
     "publish": "node publish.mjs"
   },
   "dependencies": {

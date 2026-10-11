@@ -1,7 +1,7 @@
 ---
 type: "messenger_chat"
-id: "e95ab216-289b-5fe2-a6a0-379db8a8e8e3"
-title: "Licensed donor chat sample (group Room)"
-mode: "group"
+id: "9606a414-7edc-5db9-b210-a675ac9dc474"
+title: "Licensed donor chat sample (direct Room)"
+mode: "direct"
 created_at: "2009-02-13T23:31:30.123Z"
 ---

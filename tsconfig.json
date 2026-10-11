@@ -40,6 +40,7 @@
   "exclude": [
     "**/*.test.ts",
     "**/*.test.tsx",
-    "vendor/**/test"
+    "vendor/**/test",
+    "tests/support/**"
   ]
 }

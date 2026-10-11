@@ -5,6 +5,7 @@
     "tests/**/*.tsx"
   ],
   "exclude": [
-    "tests/donor/**"
+    "tests/donor/**",
+    "tests/support/**"
   ]
 }

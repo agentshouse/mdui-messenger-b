@@ -1,0 +1,602 @@
+/**
+ * Serenada call flow CSS — injected into <head> at runtime.
+ *
+ * Isolation approach: all selectors are scoped under [data-serenada-callflow]
+ * (an attribute on the root element) to prevent style leakage into host apps.
+ *
+ * Why not Shadow DOM: video elements and the Fullscreen API do not work
+ * reliably inside shadow roots across browsers, making shadow DOM unsuitable
+ * for a WebRTC call UI.
+ */
+
+const STYLES_ID = 'serenada-callflow-styles';
+
+const CALL_FLOW_CSS = `
+@keyframes serenada-spin {
+  to { transform: rotate(360deg); }
+}
+
+[data-serenada-callflow] {
+  --serenada-accent: #3b82f6;
+  position: fixed !important;
+  inset: 0 !important;
+  overflow: hidden !important;
+  background: #000;
+  color: #fff;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+}
+
+[data-serenada-callflow] video {
+  display: block;
+}
+
+[data-serenada-callflow] .call-container {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  background: #000;
+}
+
+[data-serenada-callflow] .video-remote-container.primary {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1;
+  container-type: inline-size;
+}
+
+[data-serenada-callflow] .video-remote {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: object-fit 0.3s ease;
+  background: #000;
+}
+
+[data-serenada-callflow] .video-local-container.pip,
+[data-serenada-callflow] .video-remote-container.pip {
+  position: absolute;
+  right: 20px;
+  bottom: 100px;
+  width: min(160px, 30vw);
+  max-width: 30vw;
+  max-height: 30vh;
+  aspect-ratio: 9 / 16;
+  overflow: hidden;
+  background: #333;
+  border: 2px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+  cursor: pointer;
+  z-index: 10;
+  transform-origin: bottom right;
+  transition: all 0.25s ease;
+}
+
+[data-serenada-callflow] .video-local-container.primary {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background: #000;
+}
+
+@media (min-width: 768px) {
+  [data-serenada-callflow] .video-local-container.pip,
+  [data-serenada-callflow] .video-remote-container.pip {
+    right: 32px;
+    bottom: 100px;
+    width: min(240px, 30vw);
+    aspect-ratio: 4 / 3;
+  }
+}
+
+[data-serenada-callflow] .video-local {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: object-fit 0.3s ease;
+  background: #000;
+}
+
+[data-serenada-callflow] .video-local.mirrored {
+  transform: scaleX(-1);
+}
+
+[data-serenada-callflow].multi-party-call .video-stage {
+  position: absolute;
+  inset: 0;
+  padding: 16px 16px 184px;
+  background:
+    radial-gradient(circle at top, rgba(47, 129, 247, 0.14), transparent 32%),
+    radial-gradient(circle at bottom, rgba(255, 255, 255, 0.05), transparent 30%),
+    #050608;
+  z-index: 1;
+}
+
+[data-serenada-callflow].multi-party-call .video-stage-viewport {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+[data-serenada-callflow].multi-party-call .video-stage-rows {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  max-width: 100%;
+  max-height: 100%;
+}
+
+[data-serenada-callflow].multi-party-call .video-stage-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  max-width: 100%;
+}
+
+[data-serenada-callflow].multi-party-call .video-stage-tile {
+  position: relative;
+  overflow: hidden;
+  flex: 0 0 auto;
+  border-radius: 10px;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.03), transparent 30%),
+    #111;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 18px 38px rgba(0, 0, 0, 0.35);
+  container-type: inline-size;
+}
+
+[data-serenada-callflow].multi-party-call .video-stage-remote {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  background: #060708;
+}
+
+[data-serenada-callflow] .video-grid-label {
+  position: absolute;
+  bottom: 12px;
+  left: 12px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.56);
+  color: #fff;
+  font-size: 12px;
+  backdrop-filter: blur(6px);
+}
+
+[data-serenada-callflow] .video-stage-placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  background: #111;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+[data-serenada-callflow] .video-camera-off-overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(8px, 2cqi, 24px);
+  background: #111;
+  border-radius: inherit;
+  z-index: 1;
+}
+
+[data-serenada-callflow] .video-camera-off-label {
+  font-size: clamp(11px, 4cqi, 52px);
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.85);
+  text-align: center;
+  padding: 0 16px;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+[data-serenada-callflow] .serenada-avatar-circle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: clamp(45px, 17.6cqi, 134px);
+  height: clamp(45px, 17.6cqi, 134px);
+  border-radius: 50%;
+  overflow: hidden;
+  background: #2a2a2a;
+  color: rgba(255, 255, 255, 0.85);
+  font-size: clamp(16px, 6.4cqi, 51px);
+  font-weight: 600;
+  line-height: 1;
+  text-transform: uppercase;
+  user-select: none;
+  flex-shrink: 0;
+}
+
+[data-serenada-callflow] .serenada-avatar-circle.compact {
+  width: clamp(22px, 8.8cqi, 67px);
+  height: clamp(22px, 8.8cqi, 67px);
+  font-size: clamp(8px, 3.2cqi, 26px);
+}
+
+[data-serenada-callflow] .video-camera-off-overlay.compact {
+  gap: clamp(4px, 1cqi, 12px);
+}
+
+[data-serenada-callflow] .video-camera-off-overlay.compact .video-camera-off-label {
+  font-size: clamp(10px, 2cqi, 18px);
+  padding: 0 8px;
+}
+
+[data-serenada-callflow] .serenada-avatar-circle img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+[data-serenada-callflow] .video-stage-pin-indicator {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4px;
+  border-radius: 6px;
+  background: rgba(0, 0, 0, 0.56);
+  color: #fff;
+  backdrop-filter: blur(6px);
+}
+
+/* Independent screen share: capture is live but no peer is receiving yet. */
+[data-serenada-callflow] .content-waiting-badge {
+  position: absolute;
+  top: 12px;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 6px 12px;
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.62);
+  color: rgba(255, 255, 255, 0.92);
+  font-size: 13px;
+  font-weight: 600;
+  backdrop-filter: blur(6px);
+  z-index: 3;
+  max-width: 90%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+[data-serenada-callflow].multi-party-call .video-local-container-stage {
+  right: 16px;
+  bottom: 108px;
+  width: min(132px, 26vw);
+  max-width: 26vw;
+  max-height: 24vh;
+  border-width: 1px;
+  border-radius: 8px;
+  background: rgba(17, 17, 17, 0.95);
+  box-shadow: 0 14px 32px rgba(0, 0, 0, 0.42);
+}
+
+@media (min-width: 768px) {
+  [data-serenada-callflow].multi-party-call .video-stage {
+    padding: 24px 28px 136px;
+  }
+
+  [data-serenada-callflow].multi-party-call .video-stage-tile {
+    border-radius: 12px;
+  }
+
+  [data-serenada-callflow].multi-party-call .video-local-container-stage {
+    right: 32px;
+    bottom: 112px;
+    width: min(220px, 22vw);
+    max-width: 22vw;
+    max-height: 22vh;
+    border-radius: 10px;
+  }
+}
+
+[data-serenada-callflow] .controls-bar {
+  position: absolute;
+  left: 50%;
+  bottom: 20px;
+  display: flex;
+  gap: 1rem;
+  padding: 1rem 2rem;
+  border-radius: 50px;
+  background: rgba(22, 27, 34, 0.8);
+  backdrop-filter: blur(10px);
+  z-index: 20;
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+  transition: opacity 0.25s ease, transform 0.25s ease;
+}
+
+[data-serenada-callflow].controls-hidden .controls-bar {
+  opacity: 0;
+  transform: translateX(-50%) translateY(20px);
+  pointer-events: none;
+}
+
+[data-serenada-callflow].controls-hidden .video-local-container.pip,
+[data-serenada-callflow].controls-hidden .video-remote-container.pip {
+  bottom: 20px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.4);
+}
+
+[data-serenada-callflow] .btn-control {
+  width: 50px;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  border-radius: 50%;
+  background: #161b22;
+  color: #fff;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+[data-serenada-callflow] .btn-control:hover {
+  background: #30363d;
+}
+
+[data-serenada-callflow] .btn-control:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+[data-serenada-callflow] .btn-control:disabled:hover {
+  background: #161b22;
+}
+
+[data-serenada-callflow] .btn-control.active {
+  background: #fff;
+  color: #000;
+}
+
+[data-serenada-callflow] .btn-control.active-screen-share {
+  background: #8b1b1b;
+}
+
+[data-serenada-callflow] .btn-control.active-screen-share:hover {
+  background: #da3633;
+}
+
+[data-serenada-callflow] .btn-leave {
+  background: #551111;
+}
+
+[data-serenada-callflow] .btn-leave:hover {
+  background: #da3633;
+}
+
+[data-serenada-callflow] .btn-zoom {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  z-index: 21;
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  background: rgba(22, 27, 34, 0.6);
+  color: #fff;
+  cursor: pointer;
+  backdrop-filter: blur(8px);
+  transition: all 0.2s ease;
+}
+
+[data-serenada-callflow] .btn-zoom:hover {
+  transform: scale(1.05);
+  border-color: var(--serenada-accent);
+  color: var(--serenada-accent);
+}
+
+[data-serenada-callflow] .btn-zoom:active {
+  transform: scale(0.95);
+}
+
+[data-serenada-callflow].controls-hidden .btn-zoom {
+  opacity: 0;
+  pointer-events: none;
+}
+
+[data-serenada-callflow] .btn-snapshot {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  z-index: 22;
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  background: rgba(22, 27, 34, 0.6);
+  color: #fff;
+  cursor: pointer;
+  backdrop-filter: blur(8px);
+  transition: all 0.2s ease;
+}
+
+[data-serenada-callflow] .btn-snapshot.cascade-landscape {
+  right: 74px;
+}
+
+[data-serenada-callflow] .btn-snapshot.cascade-portrait {
+  top: 74px;
+}
+
+[data-serenada-callflow] .btn-snapshot:hover {
+  transform: scale(1.05);
+  border-color: var(--serenada-accent);
+  color: var(--serenada-accent);
+}
+
+[data-serenada-callflow] .btn-snapshot:active {
+  transform: scale(0.95);
+}
+
+[data-serenada-callflow] .btn-snapshot:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+  transform: none;
+}
+
+[data-serenada-callflow].controls-hidden .btn-snapshot {
+  opacity: 0;
+  pointer-events: none;
+}
+
+[data-serenada-callflow] .participant-badge {
+  position: absolute;
+  bottom: 6px;
+  left: 6px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 5px 6px;
+  border-radius: 8px;
+  background: rgba(0, 0, 0, 0.56);
+  color: #ef4444;
+  z-index: 5;
+  pointer-events: none;
+  max-width: calc(100% - 12px);
+}
+
+[data-serenada-callflow] .participant-badge-name {
+  color: #fff;
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+[data-serenada-callflow] .audio-activity-indicator {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  flex-shrink: 0;
+}
+
+[data-serenada-callflow] .audio-activity-bar {
+  width: 3px;
+  border-radius: 1.5px;
+  background: #22c55e;
+  transition: height 100ms ease-out;
+}
+
+[data-serenada-callflow] .debug-toggle-zone {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 72px;
+  height: 72px;
+  z-index: 41;
+  pointer-events: auto;
+  touch-action: manipulation;
+  user-select: none;
+}
+
+[data-serenada-callflow] .permission-denied-banner {
+  position: absolute;
+  top: 18px;
+  left: 50%;
+  max-width: min(420px, calc(100% - 32px));
+  padding: 10px 14px;
+  border-radius: 8px;
+  background: rgba(24, 28, 34, 0.92);
+  color: #fff;
+  font-size: 14px;
+  line-height: 1.35;
+  text-align: center;
+  transform: translateX(-50%);
+  z-index: 42;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+}
+
+[data-serenada-callflow] .waiting-message {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  color: #8b949e;
+  z-index: 15;
+}
+
+[data-serenada-callflow] .qr-code-container {
+  width: 200px;
+  height: 200px;
+  padding: 8px;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.35);
+}
+
+[data-serenada-callflow] .btn-small {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 0.5rem 1rem;
+  border: 1px solid #8b949e;
+  border-radius: 20px;
+  background: transparent;
+  color: #8b949e;
+  cursor: pointer;
+  transition: border-color 0.2s ease, color 0.2s ease;
+}
+
+[data-serenada-callflow] .btn-small:hover {
+  border-color: var(--serenada-accent);
+  color: var(--serenada-accent);
+}
+
+[data-serenada-callflow] .waiting-actions {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+}
+`;
+
+export function ensureCallFlowStyles(): void {
+    if (typeof document === 'undefined') return;
+    if (document.getElementById(STYLES_ID)) return;
+
+    const style = document.createElement('style');
+    style.id = STYLES_ID;
+    style.textContent = CALL_FLOW_CSS;
+    document.head.appendChild(style);
+}

@@ -4,12 +4,12 @@ import { verify, validate } from "@agentshouse/mdmodel";
 const checked = verify(fs.readFileSync("schema.yaml", "utf8"));
 assert.equal(checked.verdict, "accept", JSON.stringify(checked));
 for (const sample of JSON.parse(
-  fs.readFileSync("scripts/sample-rooms.json", "utf8"),
+  fs.readFileSync("tests/support/sample-rooms.json", "utf8"),
 )) {
   const library = Object.fromEntries(
     sample.files.map((name) => [
       name,
-      fs.readFileSync(`samples/${sample.folder}/${name}`, "utf8"),
+      fs.readFileSync(`tests/support/samples/${sample.folder}/${name}`, "utf8"),
     ]),
   );
   const result = validate(library, undefined, checked.model);
@@ -29,7 +29,7 @@ const document = (type, fields) =>
     .join("\n") +
   "\n---\n";
 const callLibrary = {
-  "chats/main.md": fs.readFileSync("samples/direct/chats/main.md", "utf8"),
+  "chats/main.md": fs.readFileSync("tests/support/samples/direct/chats/main.md", "utf8"),
   [`calls/${callId}.md`]: document("messenger_call", {
     id: callId,
     wire_call_id: wireId,
@@ -61,3 +61,11 @@ assert.equal(callResult.verdict, "accept", JSON.stringify(callResult));
 console.log(
   "JSON Schema, two independent Room samples, and synthetic call/part references accepted. No live Room or audio created.",
 );
+
+const starterFiles = fs.readdirSync("starter", { recursive: true }).filter(name => name.endsWith(".md"));
+const starter = Object.fromEntries(starterFiles.map(name => [name, fs.readFileSync(`starter/${name}`, "utf8")]));
+assert.equal(starterFiles.length, 4);
+const starterResult = validate(starter, undefined, checked.model);
+assert.equal(starterResult.verdict, "accept", JSON.stringify(starterResult));
+for (const [name, text] of Object.entries(starter)) assert.equal(text, fs.readFileSync(`tests/support/samples/direct/${name}`, "utf8"));
+console.log("Starter documents and their reference closure accepted; original licensed bytes preserved.");

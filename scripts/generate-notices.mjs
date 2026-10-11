@@ -116,8 +116,9 @@ fs.writeFileSync(
   path.join(root, "public/THIRD_PARTY_NOTICES.txt"),
   notices.join("\n") + "\n",
 );
+fs.mkdirSync(path.join(root, ".verification"), { recursive: true });
 fs.writeFileSync(
-  path.join(root, "reports/license-audit.json"),
+  path.join(root, ".verification/license-audit.json"),
   JSON.stringify({ donors: donorNotices, packages, missing }, null, 2) + "\n",
 );
 console.log(JSON.stringify({ packages: packages.length, missing }));

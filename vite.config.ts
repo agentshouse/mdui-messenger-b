@@ -14,6 +14,6 @@ export default defineConfig({
       ),
     },
   },
-  test: { environment: "jsdom", include: ["tests/**/*.test.{ts,tsx}"] },
+  test: { environment: "jsdom", include: ["tests/**/*.test.{ts,tsx}"], exclude: ["tests/support/**"] },
   build: { sourcemap: false, modulePreload: { polyfill: false } },
 });

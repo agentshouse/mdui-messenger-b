@@ -5,9 +5,9 @@ import { HouseMessengerStore } from '../src/data/house';
 import { fakeRuntime } from './fakeRuntime';
 
 test('licensed chat payloads are complete, isolated and contain no call or media history', async () => {
- const provenance=JSON.parse(fs.readFileSync('samples/PROVENANCE.json','utf8'));
- for(const [file,key] of [['messages.ts','source_sha256'],['LICENSE','license_sha256']]) expect(crypto.createHash('sha256').update(fs.readFileSync(`samples/donor/${file}`)).digest('hex')).toBe(provenance[key]);
- const payloads=JSON.parse(fs.readFileSync('scripts/donor-seed-rooms.json','utf8')) as {folder:string;requires_separate_room:boolean;changes:{path:string;content:string}[]}[];
+ const provenance=JSON.parse(fs.readFileSync('tests/support/samples/PROVENANCE.json','utf8'));
+ for(const [file,key] of [['messages.ts','source_sha256'],['LICENSE','license_sha256']]) expect(crypto.createHash('sha256').update(fs.readFileSync(`tests/support/samples/donor/${file}`)).digest('hex')).toBe(provenance[key]);
+ const payloads=JSON.parse(fs.readFileSync('tests/support/donor-seed-rooms.json','utf8')) as {folder:string;requires_separate_room:boolean;changes:{path:string;content:string}[]}[];
  expect(payloads.map(p=>p.folder)).toEqual(['direct','group']); const ids = new Set();
  const documents=payloads.flatMap((payload,index)=>{
   expect(payload.requires_separate_room).toBe(true);expect(payload.changes).toHaveLength(18);
