@@ -18,7 +18,7 @@
     "test:publisher": "node --test scripts/publish-regression.mjs"
   },
   "dependencies": {
-    "@agentshouse/app-bridge": "0.1.0-ce524f6608238",
+    "@agentshouse/app-bridge": "0.1.0-ca4ec913df08d",
     "@radix-ui/react-avatar": "^1.1.11",
     "@radix-ui/react-collapsible": "^1.1.12",
     "@radix-ui/react-dialog": "^1.1.15",

@@ -68,14 +68,14 @@ it('restores a Room-local composer after full App/store remount without sending'
 });
 
 it('opens a shared chat link through the official bridge and restores its native composer across reload', async()=>{
- const {connectHouseBridge}=await import('@agentshouse/app-bridge');
+ const {houseBridge}=await import('@agentshouse/app-bridge');
  const {createHouseBridgeTestHost}=await import('@agentshouse/app-bridge/test-host');
  const {ChatNavigation}=await import('../src/navigation');
  const {HouseMessengerStore}=await import('../src/data/house');
  const {fakeRuntime}=await import('./fakeRuntime');
  const f=fakeRuntime();
  const host=createHouseBridgeTestHost({address:'/chats?room=r_one'});
- const nav=new ChatNavigation(connectHouseBridge(host));
+ const nav=new ChatNavigation(houseBridge());
  const first=new HouseMessengerStore(async()=>f.runtime);
  const view=render(<App store={first} navigation={nav}/>);
  const composer=await screen.findByLabelText('Message');
@@ -83,18 +83,18 @@ it('opens a shared chat link through the official bridge and restores its native
  await waitFor(()=>expect(first.snapshot().availableDrafts?.[0].text).toBe('Raw draft survives a shared chat link'));
  expect(host.navigations).toHaveLength(0);
  view.unmount();
- const againHost=createHouseBridgeTestHost({address:'/chats?room=r_one'});
+ createHouseBridgeTestHost({address:'/chats?room=r_one'});
  const again=new HouseMessengerStore(async()=>f.runtime);
- render(<App store={again} navigation={new ChatNavigation(connectHouseBridge(againHost))}/>);
+ render(<App store={again} navigation={new ChatNavigation(houseBridge())}/>);
  await waitFor(()=>expect((screen.getByLabelText('Message') as HTMLTextAreaElement).value).toBe('Raw draft survives a shared chat link'));
  expect(f.raw.save).not.toHaveBeenCalled(); expect(f.raw.call).not.toHaveBeenCalled();
 });
 
 it('keeps chat drafts through UI navigation, host Back/Forward and root without sending or requesting media',async()=>{
- const {connectHouseBridge}=await import('@agentshouse/app-bridge'); const {createHouseBridgeTestHost}=await import('@agentshouse/app-bridge/test-host'); const {ChatNavigation}=await import('../src/navigation');
+ const {houseBridge}=await import('@agentshouse/app-bridge'); const {createHouseBridgeTestHost}=await import('@agentshouse/app-bridge/test-host'); const {ChatNavigation}=await import('../src/navigation');
  const s=store(); const media={getUserMedia:vi.fn(),enumerateDevices:vi.fn()}; Object.defineProperty(navigator,'mediaDevices',{value:media,configurable:true});
  const host=createHouseBridgeTestHost({address:'/chats?room=r_two'});
- render(<App store={s} navigation={new ChatNavigation(connectHouseBridge(host))}/>);
+ render(<App store={s} navigation={new ChatNavigation(houseBridge())}/>);
  await screen.findByLabelText('Message'); fireEvent.change(screen.getByLabelText('Message'),{target:{value:'Team unsent'}});
  expect(host.navigations).toHaveLength(0);
  fireEvent.click(screen.getByRole('button',{name:'Open Product chat'}));
@@ -108,11 +108,11 @@ it('keeps chat drafts through UI navigation, host Back/Forward and root without 
 });
 
 it('retains a pending deep link while data loads and shows unavailable rather than choosing another Room',async()=>{
- const {act}=await import('@testing-library/react'); const {connectHouseBridge}=await import('@agentshouse/app-bridge'); const {createHouseBridgeTestHost}=await import('@agentshouse/app-bridge/test-host'); const {ChatNavigation}=await import('../src/navigation');
+ const {act}=await import('@testing-library/react'); const {houseBridge}=await import('@agentshouse/app-bridge'); const {createHouseBridgeTestHost}=await import('@agentshouse/app-bridge/test-host'); const {ChatNavigation}=await import('../src/navigation');
  const original=store(); let state={...original.snapshot(),loading:true,chats:[] as Snapshot['chats']}; const listeners=new Set<()=>void>();
  const s={...original,snapshot:()=>state,subscribe:(fn:()=>void)=>{listeners.add(fn);return()=>{listeners.delete(fn);};}};
  const host=createHouseBridgeTestHost({address:'/chats?room=r_two'});
- render(<App store={s} navigation={new ChatNavigation(connectHouseBridge(host))}/>);
+ render(<App store={s} navigation={new ChatNavigation(houseBridge())}/>);
  await screen.findByText('Loading conversation…'); expect(host.navigations).toHaveLength(0);
  act(()=>{state={...original.snapshot()};listeners.forEach(fn=>fn());}); await screen.findByLabelText('Message');
  expect(screen.queryByText('Alex')).toBeNull(); expect(host.navigations).toHaveLength(0);
@@ -121,11 +121,11 @@ it('retains a pending deep link while data loads and shows unavailable rather th
 });
 
 it('cancels pending voice capture on host navigation and never sends to the new chat',async()=>{
- const {connectHouseBridge}=await import('@agentshouse/app-bridge'); const {createHouseBridgeTestHost}=await import('@agentshouse/app-bridge/test-host'); const {ChatNavigation}=await import('../src/navigation'); const {VoiceCapture}=await import('../src/call/voiceCapture');
+ const {houseBridge}=await import('@agentshouse/app-bridge'); const {createHouseBridgeTestHost}=await import('@agentshouse/app-bridge/test-host'); const {ChatNavigation}=await import('../src/navigation'); const {VoiceCapture}=await import('../src/call/voiceCapture');
  let release!:()=>void; const pending=new Promise<void>(resolve=>{release=resolve;});
  const started=vi.spyOn(VoiceCapture.prototype,'start').mockReturnValue(pending); const canceled=vi.spyOn(VoiceCapture.prototype,'cancel').mockImplementation(()=>{});
  const s=store(); const host=createHouseBridgeTestHost({address:'/chats?room=r_one'});
- const view=render(<App store={s} navigation={new ChatNavigation(connectHouseBridge(host))}/>);
+ const view=render(<App store={s} navigation={new ChatNavigation(houseBridge())}/>);
  try {
    await screen.findByLabelText('Message'); fireEvent.click(screen.getByRole('button',{name:'Record voice message'}));
    await screen.findByText('Waiting for microphone permission…'); expect(started).toHaveBeenCalledOnce();
@@ -137,9 +137,9 @@ it('cancels pending voice capture on host navigation and never sends to the new 
 });
 
 it('keeps a later conversation draft when an earlier explicit send finishes after host navigation',async()=>{
- const {connectHouseBridge}=await import('@agentshouse/app-bridge'); const {createHouseBridgeTestHost}=await import('@agentshouse/app-bridge/test-host'); const {ChatNavigation}=await import('../src/navigation');
+ const {houseBridge}=await import('@agentshouse/app-bridge'); const {createHouseBridgeTestHost}=await import('@agentshouse/app-bridge/test-host'); const {ChatNavigation}=await import('../src/navigation');
  const s=store(); let finish!:()=>void; s.send.mockImplementationOnce(()=>new Promise<void>(resolve=>{finish=resolve;}));
- const host=createHouseBridgeTestHost({address:'/chats?room=r_one'});render(<App store={s} navigation={new ChatNavigation(connectHouseBridge(host))}/>);
+ const host=createHouseBridgeTestHost({address:'/chats?room=r_one'});render(<App store={s} navigation={new ChatNavigation(houseBridge())}/>);
  await screen.findByLabelText('Message'); fireEvent.change(screen.getByLabelText('Message'),{target:{value:'Explicit first message'}});fireEvent.click(screen.getByLabelText('Send message'));
  host.open('/chats?room=r_two'); await waitFor(()=>expect((screen.getByLabelText('Message') as HTMLTextAreaElement).value).toBe(''));
  fireEvent.change(screen.getByLabelText('Message'),{target:{value:'Keep second draft'}}); finish();
@@ -149,9 +149,9 @@ it('keeps a later conversation draft when an earlier explicit send finishes afte
 });
 
 it('keeps an open call panel mounted while host navigation changes the preferred chat without starting a call',async()=>{
- const {connectHouseBridge}=await import('@agentshouse/app-bridge'); const {createHouseBridgeTestHost}=await import('@agentshouse/app-bridge/test-host'); const {ChatNavigation}=await import('../src/navigation');
+ const {houseBridge}=await import('@agentshouse/app-bridge'); const {createHouseBridgeTestHost}=await import('@agentshouse/app-bridge/test-host'); const {ChatNavigation}=await import('../src/navigation');
  const media={getUserMedia:vi.fn(),enumerateDevices:vi.fn()};Object.defineProperty(navigator,'mediaDevices',{value:media,configurable:true});
- const host=createHouseBridgeTestHost({address:'/chats?room=r_one'});render(<App store={store()} navigation={new ChatNavigation(connectHouseBridge(host))}/>);
+ const host=createHouseBridgeTestHost({address:'/chats?room=r_one'});render(<App store={store()} navigation={new ChatNavigation(houseBridge())}/>);
  await screen.findByLabelText('Message');fireEvent.click(screen.getByLabelText('Audio call'));
  const holder=await screen.findByLabelText('Call a holder');
  host.open('/chats?room=r_two'); await waitFor(()=>expect(screen.queryByText('Alex')).toBeNull());

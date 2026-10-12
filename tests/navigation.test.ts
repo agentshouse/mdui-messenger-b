@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from "vitest";
-import { connectHouseBridge } from "@agentshouse/app-bridge";
+import { houseBridge } from "@agentshouse/app-bridge";
 import { createHouseBridgeTestHost } from "@agentshouse/app-bridge/test-host";
 import { ChatNavigation, chatAddress, readChatAddress, type NavigationBridge } from "../src/navigation";
 const tick = () => new Promise(resolve => setTimeout(resolve, 0));
@@ -52,7 +52,7 @@ describe("House chat addressing", () => {
   });
   it("uses the actual official bridge host for initial link, navigation and Back/Forward", async () => {
     const host = createHouseBridgeTestHost({ address: "/chats?room=r_two" });
-    const nav = new ChatNavigation(connectHouseBridge(host)); const off = nav.subscribe(vi.fn());
+    const nav = new ChatNavigation(houseBridge()); const off = nav.subscribe(vi.fn());
     await vi.waitFor(() => expect(nav.snapshot().room).toBe("r_two")); expect(host.navigations).toHaveLength(0);
     nav.navigate("r_one"); await vi.waitFor(() => expect(nav.snapshot().room).toBe("r_one"));
     expect(host.navigations).toEqual([{ mode: "push", address: "/chats?room=r_one" }]);

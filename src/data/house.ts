@@ -1,6 +1,6 @@
 import { DraftChangedError, DraftSaveError, DraftSaveUncertainError, DraftSession, type RoomDraft } from "./draft-session";
 import { MAX_FILE_BYTES, uploadAttachment } from "./assets";
-import { connectHouseBridge } from "@agentshouse/app-bridge";
+import { houseBridge as getHouseBridge } from "@agentshouse/app-bridge";
 import {
   chatSchema,
   attachmentSchema,
@@ -18,7 +18,7 @@ import {
   type MessageOutcome,
   type Attachment,
 } from "./model";
-export type Runtime = Awaited<ReturnType<typeof connectHouseBridge>["runtime"]>;
+export type Runtime = Awaited<ReturnType<typeof getHouseBridge>["runtime"]>;
 const observeQueue = (runtime: Runtime, room: string) => runtime.observe("queue", room);
 type Queue = ReturnType<Awaited<ReturnType<typeof observeQueue>>["current"]>;
 const messageKey = (message: { room: string; path: string }) => `${message.room}/${message.path}`;
@@ -41,10 +41,10 @@ export const query = {
   select: { fields: "all" as const, change: true as const },
   orderBy: [{ by: "path" as const, direction: "asc" as const }],
 };
-let bridge: ReturnType<typeof connectHouseBridge> | undefined;
+let bridge: ReturnType<typeof getHouseBridge> | undefined;
 export function houseBridge() {
   if (!bridge) {
-    bridge = connectHouseBridge();
+    bridge = getHouseBridge();
     bridge.setTab({ title: "messenger-b" });
   }
   return bridge;

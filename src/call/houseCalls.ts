@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { connectHouseBridge } from "@agentshouse/app-bridge";
+import { houseBridge } from "@agentshouse/app-bridge";
 import type { Runtime } from "../data/house";
 const holderSchema = z
   .object({ user: z.string().min(1), name: z.string(), email: z.string() })
@@ -64,5 +64,5 @@ export class HouseCallAPI {
 export function receiveHouseMessages(
   listener: (message: { from: string; body: unknown }) => void,
 ) {
-  return connectHouseBridge().messages(listener);
+  return houseBridge().messages(listener);
 }
