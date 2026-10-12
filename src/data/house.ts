@@ -41,15 +41,15 @@ export const query = {
   select: { fields: "all" as const, change: true as const },
   orderBy: [{ by: "path" as const, direction: "asc" as const }],
 };
-let connection: Promise<Runtime> | undefined;
-export function houseRuntime() {
-  connection ??= (async () => {
-    const b = connectHouseBridge();
-    b.setTab({ title: "messenger-b" });
-    return b.runtime;
-  })();
-  return connection;
+let bridge: ReturnType<typeof connectHouseBridge> | undefined;
+export function houseBridge() {
+  if (!bridge) {
+    bridge = connectHouseBridge();
+    bridge.setTab({ title: "messenger-b" });
+  }
+  return bridge;
 }
+export function houseRuntime() { return houseBridge().runtime; }
 const errorText = (e: unknown) => (e instanceof Error ? e.message : String(e));
 export class HouseMessengerStore implements Store {
   private state: Snapshot = {

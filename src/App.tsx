@@ -1,4 +1,5 @@
 import {
+  useCallback,
   useEffect,
   useMemo,
   useRef,
@@ -19,12 +20,17 @@ import { ChatComposer, ChatMessages, type ThreadMessage } from "./chatcn/chat";
 import { Button } from "./components/ui/button";
 import { Attachment } from "./components/Attachment";
 import { CallWorkspace } from "./components/CallWorkspace";
-import { HouseMessengerStore } from "./data/house";
+import { HouseMessengerStore, houseBridge } from "./data/house";
 import { type Store, type Message } from "./data/model";
+import { ChatNavigation } from "./navigation";
 import { VoiceCapture } from "./call/voiceCapture";
 import "./chatcn/chat.css";
 const productionStore = new HouseMessengerStore();
-export function App({ store = productionStore }: { store?: Store }) {
+export function App({ store = productionStore, navigation: suppliedNavigation }: { store?: Store; navigation?: ChatNavigation }) {
+  const navigation = useMemo(() => suppliedNavigation ?? (store === productionStore ? new ChatNavigation(houseBridge()) : null), [suppliedNavigation, store]);
+  const [navigationError, setNavigationError] = useState<string | null>(null);
+  const [routeReady, setRouteReady] = useState(!navigation);
+
   const state = useSyncExternalStore(store.subscribe, store.snapshot),
     [room, setRoom] = useState<string | null>(null),
     [filter, setFilter] = useState(""),
@@ -108,7 +114,7 @@ export function App({ store = productionStore }: { store?: Store }) {
         });
     }
   };
-  const select = (next: string | null) => {
+  const applySelection = useCallback((next: string | null) => {
     capture.current?.cancel();
     capture.current = null;
     setRecording(false);
@@ -118,6 +124,26 @@ export function App({ store = productionStore }: { store?: Store }) {
     setSearch("");
     setNotice("");
     setEditing(null);
+  }, []);
+  useEffect(() => {
+    if (!navigation) return;
+    let previous: string | null | undefined;
+    const apply = () => {
+      const route = navigation.snapshot();
+      setNavigationError(route.error);
+      setRouteReady(route.ready);
+      if (route.ready && route.room !== previous) {
+        previous = route.room;
+        applySelection(route.room);
+      }
+    };
+    const unsubscribe = navigation.subscribe(apply);
+    apply();
+    return unsubscribe;
+  }, [navigation, applySelection]);
+  const select = (next: string | null) => {
+    if (navigation) navigation.navigate(next);
+    else applySelection(next);
   };
   const submit = async () => {
     if (
@@ -266,6 +292,7 @@ export function App({ store = productionStore }: { store?: Store }) {
       className={dark ? "dark messenger-app" : "messenger-app"}
       data-chat-theme={dark ? "midnight" : "aurora"}
     >
+      {navigationError && <div role="alert" className="p-3 text-sm text-destructive">{navigationError}</div>}
       <div className="messenger-shell flex min-h-0 bg-[var(--chat-bg-app)] shadow-[var(--chat-shadow-lg)]">
         <aside
           className={`chat-list flex flex-col border-r border-[var(--chat-border-strong)] bg-[var(--chat-bg-sidebar)] min-h-0 ${room ? "mobile-hidden" : ""}`}
@@ -378,10 +405,11 @@ export function App({ store = productionStore }: { store?: Store }) {
               <div className="empty-chat-icon">
                 <MessageCircle className="size-8" />
               </div>
-              <h2 className="mt-4 text-lg font-semibold">Your conversations</h2>
+              <h2 className="mt-4 text-lg font-semibold">{room ? (!routeReady || state.loading ? "Opening conversation" : "Conversation unavailable") : "Your conversations"}</h2>
               <p className="mt-2 max-w-xs text-sm text-[var(--chat-text-secondary)]">
-                Choose a chat to read messages, reply or share a voice note.
+                {!routeReady || state.loading ? "Loading conversation…" : room ? "This linked conversation is not available in the connected Rooms." : "Choose a chat to read messages, reply or share a voice note."}
               </p>
+              {room && <Button onClick={() => select(null)}>Back to chats</Button>}
             </div>
           ) : (
             <div data-slot="chat" className="flex h-full min-h-0 flex-col">
