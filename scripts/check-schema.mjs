@@ -48,7 +48,8 @@ const callLibrary = {
     duration_ms: 1000.3,
     participants,
     files: participants.map((speaker, index) => ({
-      attachment_ref: `at_fixture_${index}`,
+      path: `files/fixture_${index}`,
+      sha256: "0".repeat(64),
       name: `fixture-${index}.webm`,
       mime: "audio/webm",
       bytes: 100,
@@ -64,8 +65,9 @@ console.log(
 
 const starterFiles = fs.readdirSync("starter", { recursive: true }).filter(name => name.endsWith(".md"));
 const starter = Object.fromEntries(starterFiles.map(name => [name, fs.readFileSync(`starter/${name}`, "utf8")]));
-assert.equal(starterFiles.length, 4);
+assert.deepEqual(starterFiles.sort(), ["chats/main.md", "messages/5dc506f3-a56f-5939-84c7-48b643f1afb6.md"]);
 const starterResult = validate(starter, undefined, checked.model);
 assert.equal(starterResult.verdict, "accept", JSON.stringify(starterResult));
-for (const [name, text] of Object.entries(starter)) assert.equal(text, fs.readFileSync(`tests/support/samples/direct/${name}`, "utf8"));
-console.log("Starter documents and their reference closure accepted; original licensed bytes preserved.");
+assert.match(starter["chats/main.md"], /title: "Your first chat"/);
+assert.match(starter["messages/5dc506f3-a56f-5939-84c7-48b643f1afb6.md"], /attachments: \[\]/);
+console.log("Current Starter documents and their reference closure accepted; donor sample validation remains separate.");

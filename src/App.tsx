@@ -261,7 +261,7 @@ export function App({ store = productionStore, navigation: suppliedNavigation }:
           }
         : undefined,
       attachmentContent: message.attachments.map((file) => (
-        <Attachment key={file.attachment_ref} file={file} room={message.room} />
+        <Attachment key={file.path} file={file} room={message.room} />
       )),
       outcome: outcome ? (
         <span

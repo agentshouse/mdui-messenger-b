@@ -148,7 +148,7 @@ export class HouseMessengerStore implements Store {
         this.providerOutcomes.delete(key);
         this.localOutcomes.delete(key);
         this.accepted.delete(key);
-        messageOutcomes[key] = { status: reason.kind, returned: reason, details: "code" in reason ? `House ${reason.kind}: ${reason.code}. ${JSON.stringify(reason.fields)}` : reason.kind === "expired" ? "The operation expired; its draft is preserved and is not known to have applied." : "House withdrew the queued change; its draft is preserved." };
+        messageOutcomes[key] = { status: reason.kind, returned: reason, details: `House ${reason.kind}: ${reason.code}. ${JSON.stringify(reason.fields)}` };
       } else if (Object.keys(draft.changedUnderneath).length) {
         messageOutcomes[key] = { status: "changed-underneath", details: `The Room changed beneath this draft. Original bases are preserved. ${JSON.stringify(draft.changedUnderneath)}` };
       } else if (!this.localOutcomes.has(key) || !["invalid", "uncertain", "changed-underneath"].includes(this.localOutcomes.get(key)!.status)) {
@@ -458,7 +458,7 @@ export class HouseMessengerStore implements Store {
   }
   private recordSaveFailure(key: string, error: unknown) {
     const status: MessageOutcome["status"] = error instanceof DraftSaveUncertainError ? "uncertain" : error instanceof DraftSaveError
-      ? error.refusal.rule === "changed-underneath" ? "changed-underneath" : "invalid"
+      ? error.refusal.code === "changed-underneath" ? "changed-underneath" : "invalid"
       : error instanceof DraftChangedError ? "changed-underneath" : "invalid";
     this.outcome(key, { status, details: error instanceof DraftSaveError ? `${error.message} ${JSON.stringify(error.refusal)}` : errorText(error) });
   }
@@ -694,7 +694,7 @@ export class HouseMessengerStore implements Store {
       throw error;
     }
     for (const file of files) {
-      attachmentSchema.omit({ attachment_ref: true }).parse({ name: file.name, mime: file.type || "application/octet-stream", bytes: file.size });
+      attachmentSchema.omit({ path: true, sha256: true }).parse({ name: file.name, mime: file.type || "application/octet-stream", bytes: file.size });
       if (!file.name.trim() || file.size === 0 || file.size > MAX_FILE_BYTES) throw new Error("Choose a nonempty named file of at most 20 MiB.");
     }
     this.emit({ busy: true });
@@ -714,7 +714,7 @@ export class HouseMessengerStore implements Store {
       const existingAttachments = attachmentSchema.array().max(8).parse(priorFields?.attachments ?? []);
       const id = composer ? composer.path.slice("messages/".length, -3) : crypto.randomUUID();
       const key = `${room}/messages/${id}.md`;
-      const newFiles = files.filter(file => !existingAttachments.some(held => held.attachment_ref === this.uploadReceipts.get(file)?.get(key)?.attachment_ref));
+      const newFiles = files.filter(file => !existingAttachments.some(held => held.path === this.uploadReceipts.get(file)?.get(key)?.path));
       if (existingAttachments.length + newFiles.length > 8) throw new Error("Attach at most eight files, including files already in this draft.");
       const fields: Record<string, unknown> = {
         ...(priorFields ?? { id, chat: "../chats/main.md", text, created_at: new Date().toISOString(), kind: "text", attachments: [] }),
@@ -757,11 +757,11 @@ export class HouseMessengerStore implements Store {
               if (!current || !creation || !("fields" in creation)) throw new DraftChangedError();
               if (current.revision !== revision) changedDuringUpload = true;
               const attached = attachmentSchema.array().parse(creation.fields.attachments);
-              const merged = [...attached, ...acknowledged.filter(item => !attached.some(held => held.attachment_ref === item.attachment_ref))];
+              const merged = [...attached, ...acknowledged.filter(item => !attached.some(held => held.path === item.path))];
               return { creation: { ...creation, fields: { ...creation.fields, attachments: merged, kind: merged.length === 1 && merged[0].mime.startsWith("audio/") ? "voice" : "file" } } };
             });
           } catch (error) {
-            const receiptEvidence = acknowledged.map(item => `${item.name} (${item.attachment_ref})`).join(", ");
+            const receiptEvidence = acknowledged.map(item => `${item.name} (${item.path})`).join(", ");
             if (!(error instanceof DraftChangedError)) throw new DraftSaveUncertainError(`Acknowledged files could not be added to the native draft. Their references remain in this open App only: ${receiptEvidence}. ${errorText(error)}`);
             // Preserve acknowledgements only on the same business path. If a
             // tab already saved it, attachments become native field edits with
@@ -773,7 +773,7 @@ export class HouseMessengerStore implements Store {
             prepared = await composer!.stage(current => {
               if (current?.parts.creation || current?.parts.markdown || current?.parts.move || current?.parts.removal) throw new DraftSaveUncertainError(`The original message has an incompatible whole-document draft. Acknowledged references remain in this open App only: ${receiptEvidence}. Review in House before retrying.`);
               const attached = attachmentSchema.array().parse(current?.parts.fields?.attachments?.value ?? original.attachments);
-              const merged = [...attached, ...acknowledged.filter(item => !attached.some(held => held.attachment_ref === item.attachment_ref))];
+              const merged = [...attached, ...acknowledged.filter(item => !attached.some(held => held.path === item.path))];
               return { fields: {
                 attachments: { base: { value: original.attachments }, value: merged },
                 kind: { base: { value: original.kind }, value: merged.length === 1 && merged[0].mime.startsWith("audio/") ? "voice" : "file" },

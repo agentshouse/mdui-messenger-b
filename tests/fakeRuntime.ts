@@ -17,7 +17,9 @@ export function fakeRuntime(initial:unknown[]=[chat(),message()]) {
  const draftWatch=observation<RoomDraft[]>([]);
  const observations={'room-drafts':draftWatch,query:observation({documents:docs}),queue:observation<Queue>([]),rooms,'sync-status':observation({lastCompleted:NOW as string|null,attentionRequired:[],providerUnreachable:false,state:'synced'}),'service-mode':observation('open'),'connection-refusal':observation<unknown>(null),'storage-loss':observation<unknown>(null)};
  const roomQueues=new Map([['r_one',observations.queue],['r_two',observation<Queue>([])]]);
+ const binaries=new Map<string,Blob>();
  const raw={
+  binaryFile:{read:vi.fn(async(room:string,path:string)=>binaries.has(key(room,path))?{kind:"binary",blob:binaries.get(key(room,path))}:{kind:"absent",code:"not_found",retryable:false})},
   rooms:vi.fn(async()=>rooms.current()),query:vi.fn(async(input:unknown)=>{assertStrictLocalQuery(input);return {documents:docs};}),
   observe:vi.fn(async(topic:keyof typeof observations,input?:unknown)=>{if(topic==='query')assertStrictLocalQuery(input);if(topic==='queue'&&typeof input==='string')return roomQueues.get(input)??observations.queue;return observations[topic];}),
   reached:vi.fn(async()=>false),
@@ -32,9 +34,10 @@ export function fakeRuntime(initial:unknown[]=[chat(),message()]) {
    }),
   },
   save:vi.fn(async(room:string,entries:{path:string;revision:string}[])=>{
-   for(const entry of entries)if(drafts.get(key(room,entry.path))?.revision!==entry.revision)return {outcome:'refused',rule:'stale'};
+   for(const entry of entries)if(drafts.get(key(room,entry.path))?.revision!==entry.revision)return {outcome:'refused',code:'stale',retryable:false};
    for(const entry of entries){
     const draft=drafts.get(key(room,entry.path))!;
+    if(draft.parts.file){binaries.set(key(room,entry.path),(draft.parts.file as {blob:Blob}).blob);drafts.delete(key(room,entry.path));continue;}
     const creation=draft.parts.creation;
     const existing=docs.find(doc=>doc.room===room&&doc.path===entry.path);
     if(creation && 'type' in creation) docs=[...docs,{room,path:entry.path,type:creation.type,fields:{...creation.fields},sections:{...creation.sections},change:{author:{kind:'user',id:'u_member',name:'Room member'}}}];

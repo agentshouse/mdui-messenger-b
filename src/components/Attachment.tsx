@@ -21,7 +21,7 @@ export function Attachment({
       request.current++;
       if (objectUrl.current) URL.revokeObjectURL(objectUrl.current);
     },
-    [room, file.attachment_ref],
+    [room, file.path],
   );
   const open = async () => {
     if (busy) return;

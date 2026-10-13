@@ -6,7 +6,7 @@ export type DraftPatch = DraftParts | ((current: RoomDraft | null) => DraftParts
 export type SaveRefusal = Exclude<Awaited<ReturnType<HouseRuntime['save']>>, { outcome: 'saved' }>;
 export class DraftSaveError extends Error {
   constructor(readonly refusal: SaveRefusal) {
-    super(`House did not queue this draft: ${refusal.rule}. The draft is preserved.`);
+    super(`House did not queue this draft: ${refusal.code}. The draft is preserved.`);
   }
 }
 export class DraftChangedError extends Error {
@@ -98,7 +98,7 @@ export class DraftSession {
           if (expectedRevision !== undefined && this.draft?.revision !== result.roomDraft?.revision) throw new DraftChangedError();
           return this.draft;
         }
-        if (result.outcome !== 'stale') throw new Error('The House draft changed unexpectedly. Its contents are preserved.');
+        if (result.outcome !== 'stale') throw Object.assign(new Error('The House draft changed unexpectedly. Its contents are preserved.'), result);
         // The Runtime owns revision comparison. Re-read, preserve its current
         // parts, and reapply this editor's latest queued input as instructed.
         known = await this.refresh();

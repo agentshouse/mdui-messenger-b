@@ -3,10 +3,6 @@
     "attachment": {
       "type": "object",
       "properties": {
-        "attachment_ref": {
-          "type": "string",
-          "pattern": "^at_[a-zA-Z0-9_.-]+$"
-        },
         "name": {
           "type": "string",
           "minLength": 1,
@@ -19,13 +15,22 @@
         "bytes": {
           "type": "integer",
           "minimum": 0
+        },
+        "path": {
+          "type": "string",
+          "pattern": "^files/[a-zA-Z0-9_-]+$"
+        },
+        "sha256": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
         }
       },
       "required": [
-        "attachment_ref",
+        "path",
         "name",
         "mime",
-        "bytes"
+        "bytes",
+        "sha256"
       ],
       "additionalProperties": false
     },
@@ -213,10 +218,6 @@
         "items": {
           "type": "object",
           "properties": {
-            "attachment_ref": {
-              "type": "string",
-              "pattern": "^at_[a-zA-Z0-9_.-]+$"
-            },
             "name": {
               "type": "string",
               "minLength": 1,
@@ -233,14 +234,23 @@
             "speaker_id": {
               "type": "string",
               "pattern": "^.+$"
+            },
+            "path": {
+              "type": "string",
+              "pattern": "^files/[a-zA-Z0-9_-]+$"
+            },
+            "sha256": {
+              "type": "string",
+              "pattern": "^[a-f0-9]{64}$"
             }
           },
           "required": [
-            "attachment_ref",
+            "path",
             "name",
             "mime",
             "bytes",
-            "speaker_id"
+            "speaker_id",
+            "sha256"
           ],
           "additionalProperties": false
         }

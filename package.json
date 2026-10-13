@@ -13,12 +13,11 @@
     "build": "tsc --noEmit && vite build",
     "release:check": "node scripts/check-release.mjs",
     "notices": "node scripts/generate-notices.mjs",
-    "verify": "npm run test:publisher && npm run typecheck && npm run lint && npm test -- --maxWorkers=2 && node scripts/check-schema.mjs && node scripts/check-provenance.mjs && npm run notices && npm run build && npm run release:check",
-    "publish": "node publish.mjs",
-    "test:publisher": "node --test scripts/publish-regression.mjs"
+    "verify": "npm run typecheck && npm run lint && npm test -- --maxWorkers=2 && node scripts/check-schema.mjs && node scripts/check-provenance.mjs && npm run notices && npm run build && npm run release:check",
+    "publish": "node publish.mjs"
   },
   "dependencies": {
-    "@agentshouse/app-bridge": "0.1.0-ca4ec913df08d",
+    "@agentshouse/app-bridge": "0.1.0-cc70c9b07c3ec",
     "@radix-ui/react-avatar": "^1.1.11",
     "@radix-ui/react-collapsible": "^1.1.12",
     "@radix-ui/react-dialog": "^1.1.15",

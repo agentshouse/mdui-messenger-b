@@ -3,7 +3,8 @@ import type { RoomDraft } from "./draft-session";
 const id = z.uuid();
 const timestamp = z.iso.datetime({ offset: true });
 export const attachmentSchema = z.object({
-  attachment_ref: z.string().regex(/^at_[a-zA-Z0-9_.-]+$/),
+  path: z.string().regex(/^files\/[a-zA-Z0-9_-]+$/),
+  sha256: z.string().regex(/^[a-f0-9]{64}$/),
   name: z.string().min(1).max(200),
   mime: z.string().max(100),
   bytes: z.number().int().nonnegative(),

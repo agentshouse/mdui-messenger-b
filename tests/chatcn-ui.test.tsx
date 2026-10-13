@@ -103,7 +103,7 @@ it('shows a returned creation draft refusal beside the restored composer',()=>{
 
 it('exposes same-message retained attachment edits for explicit review and Save',()=>{
  const f=fixture(),original=f.state.messages[0];f.store.writeMessage=vi.fn(async()=>{});f.store.saveMessage=vi.fn(async()=>{});
- f.state.messageDrafts={[`${original.room}/${original.path}`]:{room:original.room,path:original.path,text:original.text,attachments:[{attachment_ref:'at_retained',name:'acknowledged.txt',bytes:10,mime:'text/plain'}]}};
+ f.state.messageDrafts={[`${original.room}/${original.path}`]:{room:original.room,path:original.path,text:original.text,attachments:[{path:'files/retained', sha256:'0'.repeat(64),name:'acknowledged.txt',bytes:10,mime:'text/plain'}]}};
  render(<App store={f.store}/>);fireEvent.click(screen.getByLabelText('Open Product chat'));fireEvent.click(screen.getByLabelText(`Edit message ${MESSAGE}`));
  expect(screen.getByText(/Files retained in this message draft: acknowledged.txt/)).toBeTruthy();expect(f.store.saveMessage).not.toHaveBeenCalled();
  fireEvent.click(screen.getByText('Save changes'));expect(f.store.saveMessage).toHaveBeenCalledWith(original);

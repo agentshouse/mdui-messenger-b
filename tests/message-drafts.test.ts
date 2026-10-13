@@ -1,11 +1,19 @@
 // @vitest-environment node
-import { afterEach, describe, expect, it, vi } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { DraftSession, mergeDraftParts, type RoomDraft } from '../src/data/draft-session';
 import { HouseMessengerStore } from '../src/data/house';
 import { chat, fakeRuntime, message, MESSAGE, NOW } from './fakeRuntime';
 
+import { uploadAttachment } from '../src/data/assets';
+vi.mock('../src/data/assets', async original => ({
+  ...await original<typeof import('../src/data/assets')>(), uploadAttachment: vi.fn(),
+}));
+const upload = vi.mocked(uploadAttachment);
+beforeEach(() => upload.mockReset());
+const receipt = (path: string) => ({ path, sha256: '0'.repeat(64), name: `${path.split('/').at(-1)}.txt`, mime: 'text/plain', bytes: 1 });
+
 const KEY = `r_one/messages/${MESSAGE}.md`;
-const FILE = { attachment_ref: 'at_original', name: 'original.txt', mime: 'text/plain', bytes: 4 };
+const FILE = { path: 'files/original', sha256:'0'.repeat(64), name: 'original.txt', mime: 'text/plain', bytes: 4 };
 const stores: HouseMessengerStore[] = [];
 afterEach(() => { stores.splice(0).forEach(store => store.dispose()); });
 function deferred<T>() { let resolve!: (value: T) => void; const promise = new Promise<T>(yes => { resolve = yes; }); return { promise, resolve }; }
@@ -26,7 +34,7 @@ describe('native message edits', () => {
     const draft = f.drafts.get(KEY)!;
     expect(draft.parts).toEqual({ fields: { text: { base: { value: 'Ready for review' }, value: '  Edited text\n' } }, sections: { Notes: { base: 'Original notes', value: 'Other-tab notes' } }, preamble: { base: 'Original body', value: 'Other-tab body' } });
     expect(store.snapshot().messageDrafts?.[KEY].draft).toEqual(draft);
-    expect(f.raw.save).not.toHaveBeenCalled(); expect(f.raw.call).not.toHaveBeenCalled();
+    expect(f.raw.save).not.toHaveBeenCalled(); expect(upload).not.toHaveBeenCalled();
     await store.saveMessage(shown);
     expect(store.snapshot().messages.find(item => item.id === MESSAGE)).toMatchObject({ text: '  Edited text\n', reply: './33333333-3333-4333-8333-333333333333.md', attachments: [FILE] });
     expect(f.raw.roomDraft.write.mock.calls[0][3]).not.toHaveProperty('creation');
@@ -70,7 +78,7 @@ describe('native message edits', () => {
   it('can inspect and explicitly retry after a local Save refusal without typing again', async () => {
     const { f, store } = await open(); const shown = store.snapshot().messages[0];
     await store.writeMessage(shown, 'Preserve after refusal');
-    f.raw.save.mockResolvedValueOnce({ outcome: 'refused', rule: 'stale' });
+    f.raw.save.mockResolvedValueOnce({ outcome: 'refused', code:'stale',retryable:false });
     await expect(store.saveMessage(shown)).rejects.toThrow('stale');
     expect(store.snapshot().messageDrafts?.[KEY].text).toBe('Preserve after refusal');
     await store.saveMessage(shown); expect(f.raw.save).toHaveBeenCalledTimes(2);
@@ -80,7 +88,7 @@ describe('native message edits', () => {
   it('preserves changed-underneath bases and exposes the actual refusal fields', async () => {
     const { f, store } = await open(); const shown = store.snapshot().messages[0];
     await store.writeMessage(shown, 'Local text');
-    f.raw.save.mockResolvedValueOnce({ outcome: 'refused', rule: 'changed-underneath', parts: [{ path: shown.path, part: 'field', name: 'text' }] } as never);
+    f.raw.save.mockResolvedValueOnce({ outcome: 'refused', code:'changed-underneath',retryable:false, parts: [{ path: shown.path, part: 'field', name: 'text' }] } as never);
     await expect(store.saveMessage(shown)).rejects.toThrow('changed-underneath');
     expect(f.drafts.get(KEY)?.parts.fields?.text).toEqual({ base: { value: shown.text }, value: 'Local text' });
     expect(store.snapshot().messageOutcomes?.[KEY]).toMatchObject({ status: 'changed-underneath', details: expect.stringContaining('"name":"text"') });
@@ -139,7 +147,7 @@ describe('native composer Send races', () => {
 
   it('keeps typing during a refused Send on the preserved draft path', async () => {
     const { f, store } = await open(); await store.writeComposer('r_one', 'Selected'); const path = store.snapshot().composerDrafts!.r_one.path;
-    const gate = deferred<void>(); f.raw.save.mockImplementationOnce(async () => { await gate.promise; return { outcome: 'refused', rule: 'stale' }; });
+    const gate = deferred<void>(); f.raw.save.mockImplementationOnce(async () => { await gate.promise; return { outcome: 'refused', code:'stale',retryable:false }; });
     const sending = store.send('r_one', 'Selected'); const refused = expect(sending).rejects.toThrow('stale'); await vi.waitFor(() => expect(f.raw.save).toHaveBeenCalledOnce());
     const writing = store.writeComposer('r_one', 'Newer after refusal'); gate.resolve(); await refused; await writing;
     expect(store.snapshot().composerDrafts?.r_one).toMatchObject({ path, text: 'Newer after refusal' });
@@ -148,12 +156,12 @@ describe('native composer Send races', () => {
 
   it('retains an acknowledged attachment when another tab edits during upload, without sending newer text', async () => {
     const { f, store } = await open(); await store.writeComposer('r_one', 'Selected'); const { store: other } = await open(f);
-    const gate = deferred<Awaited<ReturnType<typeof f.runtime.call>>>(); f.raw.call.mockImplementationOnce(() => gate.promise as never);
+    const gate = deferred<Awaited<ReturnType<typeof uploadAttachment>>>(); upload.mockImplementationOnce(() => gate.promise as never);
     const sending = store.send('r_one', 'Selected', undefined, [new File(['synthetic'], 'new.txt', { type: 'text/plain' })]);
-    const changed = expect(sending).rejects.toThrow('newer contents'); await vi.waitFor(() => expect(f.raw.call).toHaveBeenCalledOnce());
-    await other.writeComposer('r_one', 'Other-tab text'); gate.resolve({ kind: 'action', result: { attachment: 'at_new' } }); await changed;
-    expect(store.snapshot().composerDrafts?.r_one).toMatchObject({ text: 'Other-tab text', attachments: [{ attachment_ref: 'at_new', name: 'new.txt' }] });
-    expect(f.raw.save).not.toHaveBeenCalled(); expect(f.raw.call).toHaveBeenCalledOnce();
+    const changed = expect(sending).rejects.toThrow('newer contents'); await vi.waitFor(() => expect(upload).toHaveBeenCalledOnce());
+    await other.writeComposer('r_one', 'Other-tab text'); gate.resolve(receipt('files/new')); await changed;
+    expect(store.snapshot().composerDrafts?.r_one).toMatchObject({ text: 'Other-tab text', attachments: [{ path: 'files/new', sha256:'0'.repeat(64), name: 'new.txt' }] });
+    expect(f.raw.save).not.toHaveBeenCalled(); expect(upload).toHaveBeenCalledOnce();
   });
 
   it('retains oversized native composer input on reload and failed Send', async () => {
@@ -196,7 +204,7 @@ describe('real native message outcome observations', () => {
   });
 
   it.each(['rejected', 'conflicted'] as const)('shows structured %s returned reasons exactly and preserves the draft', async kind => {
-    const { f, store } = await open(); const reason = { kind, code: 'permission_changed', fields: { operation: 'write', path: `messages/${MESSAGE}.md` } };
+    const { f, store } = await open(); const reason = { kind, code: 'permission_changed', retryable: false, fields: { operation: 'write', path: `messages/${MESSAGE}.md` } };
     seed(f, { ...editDraft({ fields: { text: { base: { value: 'Ready for review' }, value: 'Returned input' } } }), returned: reason });
     expect(store.snapshot().messageOutcomes?.[KEY]).toMatchObject({ status: kind, returned: reason, details: expect.stringContaining(JSON.stringify(reason.fields)) });
     expect(store.snapshot().messageDrafts?.[KEY].text).toBe('Returned input'); expect(f.raw.save).not.toHaveBeenCalled();
@@ -204,7 +212,7 @@ describe('real native message outcome observations', () => {
 
   it('restores returned creation drafts as selectable composers', async () => {
     const { f, store } = await open(); await store.writeComposer('r_one', 'Returned composer'); const composer = store.snapshot().composerDrafts!.r_one;
-    const key = `r_one/${composer.path}`; seed(f, { ...f.drafts.get(key)!, returned: { kind: 'rejected', code: 'invalid_message', fields: { field: 'text' } } });
+    const key = `r_one/${composer.path}`; seed(f, { ...f.drafts.get(key)!, returned: { kind: 'rejected', code: 'invalid_message', retryable: false, fields: { field: 'text' } } });
     const { store: reload } = await open(f); reload.selectComposer('r_one', composer.path);
     expect(reload.snapshot().composerDrafts?.r_one.text).toBe('Returned composer'); expect(reload.snapshot().messageOutcomes?.[key].status).toBe('rejected');
   });
@@ -237,89 +245,89 @@ describe('draft session revision guards', () => {
 describe('acknowledged attachment preservation', () => {
   it.each(['', 'Text with files'])('retains the first acknowledged file in a native draft when the next upload is uncertain: %j', async text => {
     const { f, store } = await open();
-    f.raw.call.mockResolvedValueOnce({ kind: 'action', result: { attachment: 'at_first' } } as never).mockRejectedValueOnce(new Error('Second upload answer lost'));
+    upload.mockResolvedValueOnce(receipt('files/first')).mockRejectedValueOnce(new Error('Second upload answer lost'));
     const files = [new File(['first'], 'first.txt', { type: 'text/plain' }), new File(['second'], 'second.txt', { type: 'text/plain' })];
     await expect(store.send('r_one', text, undefined, files)).rejects.toThrow('uncertain');
     const composer = store.snapshot().composerDrafts!.r_one;
-    expect(composer).toMatchObject({ text, attachments: [{ attachment_ref: 'at_first', name: 'first.txt' }] });
-    expect(f.drafts.get(`r_one/${composer.path}`)?.parts.creation).toMatchObject({ fields: { text, attachments: [{ attachment_ref: 'at_first' }] } });
+    expect(composer).toMatchObject({ text, attachments: [{ path: 'files/first', sha256:'0'.repeat(64), name: 'first.txt' }] });
+    expect(f.drafts.get(`r_one/${composer.path}`)?.parts.creation).toMatchObject({ fields: { text, attachments: [{ path: 'files/first' }] } });
     expect(store.snapshot().messageOutcomes?.[`r_one/${composer.path}`].status).toBe('uncertain');
-    expect(f.raw.save).not.toHaveBeenCalled(); expect(f.raw.call).toHaveBeenCalledTimes(2);
+    expect(f.raw.save).not.toHaveBeenCalled(); expect(upload).toHaveBeenCalledTimes(2);
     await expect(store.send('r_one', text, undefined, files)).rejects.toThrow('needs review');
-    expect(f.raw.call).toHaveBeenCalledTimes(2);
-    const { store: reload } = await open(f); expect(reload.snapshot().composerDrafts?.r_one.attachments[0].attachment_ref).toBe('at_first');
+    expect(upload).toHaveBeenCalledTimes(2);
+    const { store: reload } = await open(f); expect(reload.snapshot().composerDrafts?.r_one.attachments[0].path).toBe('files/first');
   });
 
   it('persists each acknowledged file before starting the next upload and keeps concurrent body/reply/sections', async () => {
     const { f, store } = await open(); await store.writeComposer('r_one', 'Before files', store.snapshot().messages[0]);
-    const { store: other } = await open(f); const gate = deferred<Awaited<ReturnType<typeof f.runtime.call>>>();
-    f.raw.call.mockResolvedValueOnce({ kind: 'action', result: { attachment: 'at_first' } } as never).mockImplementationOnce(() => gate.promise as never);
+    const { store: other } = await open(f); const gate = deferred<Awaited<ReturnType<typeof uploadAttachment>>>();
+    upload.mockResolvedValueOnce(receipt('files/first')).mockImplementationOnce(() => gate.promise as never);
     const files = [new File(['first'], 'first.txt'), new File(['second'], 'second.txt')];
     const sending = store.send('r_one', 'Before files', undefined, files); const changed = expect(sending).rejects.toThrow('newer contents');
-    await vi.waitFor(() => expect(f.raw.call).toHaveBeenCalledTimes(2));
+    await vi.waitFor(() => expect(upload).toHaveBeenCalledTimes(2));
     const composer = store.snapshot().composerDrafts!.r_one; const key = `r_one/${composer.path}`;
-    expect(f.drafts.get(key)?.parts.creation).toMatchObject({ fields: { attachments: [{ attachment_ref: 'at_first' }] } });
+    expect(f.drafts.get(key)?.parts.creation).toMatchObject({ fields: { attachments: [{ path: 'files/first' }] } });
     await other.writeComposer('r_one', 'Newer text'); const draft = f.drafts.get(key)!; const creation = draft.parts.creation!; if (!('fields' in creation)) throw new Error('Expected creation');
     seed(f, { ...draft, revision: 'newer-section', parts: { creation: { ...creation, sections: { Body: 'New section' } } } });
-    gate.resolve({ kind: 'action', result: { attachment: 'at_second' } }); await changed;
-    expect(f.drafts.get(key)?.parts.creation).toMatchObject({ fields: { text: 'Newer text', reply: `./${MESSAGE}.md`, attachments: [{ attachment_ref: 'at_first' }, { attachment_ref: 'at_second' }] }, sections: { Body: 'New section' } });
+    gate.resolve(receipt('files/second')); await changed;
+    expect(f.drafts.get(key)?.parts.creation).toMatchObject({ fields: { text: 'Newer text', reply: `./${MESSAGE}.md`, attachments: [{ path: 'files/first' }, { path: 'files/second' }] }, sections: { Body: 'New section' } });
     expect(f.raw.save).not.toHaveBeenCalled();
   });
 
   it('keeps all acknowledged files on Save refusal and an explicit retry does not upload the same File objects again', async () => {
     const { f, store } = await open();
-    f.raw.call.mockResolvedValueOnce({ kind: 'action', result: { attachment: 'at_first' } } as never).mockResolvedValueOnce({ kind: 'action', result: { attachment: 'at_second' } } as never);
-    f.raw.save.mockResolvedValueOnce({ outcome: 'refused', rule: 'stale' });
+    upload.mockResolvedValueOnce(receipt('files/first')).mockResolvedValueOnce(receipt('files/second'));
+    f.raw.save.mockResolvedValueOnce({ outcome: 'refused', code:'stale',retryable:false });
     const files = [new File(['first'], 'first.txt'), new File(['second'], 'second.txt')];
     await expect(store.send('r_one', '', undefined, files)).rejects.toThrow('stale');
     expect(store.snapshot().composerDrafts?.r_one.attachments).toHaveLength(2);
     await store.send('r_one', '', undefined, files);
-    expect(f.raw.call).toHaveBeenCalledTimes(2); expect(f.raw.save).toHaveBeenCalledTimes(2);
+    expect(upload).toHaveBeenCalledTimes(2); expect(f.raw.save).toHaveBeenCalledTimes(2);
     expect(store.snapshot().messages.find(item => item.text === '')?.attachments).toHaveLength(2);
   });
 
   it('keeps acknowledged files after an uncertain Save and does not resend automatically', async () => {
-    const { f, store } = await open(); f.raw.call.mockResolvedValueOnce({ kind: 'action', result: { attachment: 'at_first' } } as never);
+    const { f, store } = await open(); upload.mockResolvedValueOnce(receipt('files/first'));
     f.raw.save.mockRejectedValueOnce(new Error('Lost save answer'));
     await expect(store.send('r_one', '', undefined, [new File(['first'], 'first.txt')])).rejects.toThrow('uncertain');
-    expect(store.snapshot().composerDrafts?.r_one.attachments[0].attachment_ref).toBe('at_first');
-    expect(f.raw.call).toHaveBeenCalledOnce(); expect(f.raw.save).toHaveBeenCalledOnce();
+    expect(store.snapshot().composerDrafts?.r_one.attachments[0].path).toBe('files/first');
+    expect(upload).toHaveBeenCalledOnce(); expect(f.raw.save).toHaveBeenCalledOnce();
   });
 
   it('keeps an in-flight acknowledged upload as native attachment edits on the same path if another tab saved it', async () => {
     const { f, store } = await open(); await store.writeComposer('r_one', 'Original selected text'); const original = store.snapshot().composerDrafts!.r_one;
-    const { store: other } = await open(f); const gate = deferred<Awaited<ReturnType<typeof f.runtime.call>>>(); f.raw.call.mockImplementationOnce(() => gate.promise as never);
+    const { store: other } = await open(f); const gate = deferred<Awaited<ReturnType<typeof uploadAttachment>>>(); upload.mockImplementationOnce(() => gate.promise as never);
     const files = [new File(['first'], 'first.txt')];
     const sending = store.send('r_one', 'Original selected text', undefined, files); const changed = expect(sending).rejects.toThrow('same message path');
-    await vi.waitFor(() => expect(f.raw.call).toHaveBeenCalledOnce()); await other.send('r_one', 'Original selected text');
-    gate.resolve({ kind: 'action', result: { attachment: 'at_first' } }); await changed;
+    await vi.waitFor(() => expect(upload).toHaveBeenCalledOnce()); await other.send('r_one', 'Original selected text');
+    gate.resolve(receipt('files/first')); await changed;
     const draft = f.drafts.get(`r_one/${original.path}`)!;
-    expect(draft.parts).toMatchObject({ fields: { attachments: { base: { value: [] }, value: [{ attachment_ref: 'at_first' }] } } });
+    expect(draft.parts).toMatchObject({ fields: { attachments: { base: { value: [] }, value: [{ path: 'files/first' }] } } });
     expect(draft.parts).not.toHaveProperty('creation');
     expect(f.raw.roomDraft.write.mock.calls.every(call => call[1] === original.path)).toBe(true);
     expect(store.snapshot().composerDrafts?.r_one).toBeUndefined();
     expect(store.snapshot().messages.find(item => item.path === original.path)?.attachments).toEqual([]);
     expect(f.raw.save).toHaveBeenCalledOnce();
     await expect(store.send('r_one', 'Original selected text', undefined, files)).rejects.toThrow('Save changes');
-    expect(f.raw.call).toHaveBeenCalledOnce();
+    expect(upload).toHaveBeenCalledOnce();
     expect(f.raw.roomDraft.write.mock.calls.every(call => call[1] === original.path)).toBe(true);
-    expect(store.snapshot().messageDrafts?.[`r_one/${original.path}`].attachments?.[0].attachment_ref).toBe('at_first');
+    expect(store.snapshot().messageDrafts?.[`r_one/${original.path}`].attachments?.[0].path).toBe('files/first');
     await store.saveMessage(store.snapshot().messages.find(item => item.path === original.path)!);
-    expect(store.snapshot().messages.find(item => item.path === original.path)?.attachments[0].attachment_ref).toBe('at_first');
-    expect(f.raw.save).toHaveBeenCalledTimes(2); expect(f.raw.call).toHaveBeenCalledOnce();
+    expect(store.snapshot().messages.find(item => item.path === original.path)?.attachments[0].path).toBe('files/first');
+    expect(f.raw.save).toHaveBeenCalledTimes(2); expect(upload).toHaveBeenCalledOnce();
   });
 
   it('keeps receipt evidence in memory and creates no extra draft when the original path was discarded', async () => {
     const { f, store } = await open(); await store.writeComposer('r_one', 'Original selected text'); const original = store.snapshot().composerDrafts!.r_one;
-    const gate = deferred<Awaited<ReturnType<typeof f.runtime.call>>>(); f.raw.call.mockImplementationOnce(() => gate.promise as never);
+    const gate = deferred<Awaited<ReturnType<typeof uploadAttachment>>>(); upload.mockImplementationOnce(() => gate.promise as never);
     const sending = store.send('r_one', 'Original selected text', undefined, [new File(['first'], 'first.txt')]); const unavailable = expect(sending).rejects.toThrow('No replacement draft was created');
-    await vi.waitFor(() => expect(f.raw.call).toHaveBeenCalledOnce());
+    await vi.waitFor(() => expect(upload).toHaveBeenCalledOnce());
     f.drafts.delete(`r_one/${original.path}`); f.observations['room-drafts'].publish([]);
-    gate.resolve({ kind: 'action', result: { attachment: 'at_first' } }); await unavailable;
+    gate.resolve(receipt('files/first')); await unavailable;
     expect(f.drafts.size).toBe(0); expect(f.raw.save).not.toHaveBeenCalled();
     expect(f.raw.roomDraft.write.mock.calls.every(call => call[1] === original.path)).toBe(true);
-    expect(store.snapshot().error).toContain('first.txt (at_first)');
-    expect(store.snapshot().messageOutcomes?.[`r_one/${original.path}`]).toMatchObject({ status: 'uncertain', details: expect.stringContaining('at_first') });
+    expect(store.snapshot().error).toContain('first.txt (files/first)');
+    expect(store.snapshot().messageOutcomes?.[`r_one/${original.path}`]).toMatchObject({ status: 'uncertain', details: expect.stringContaining('files/first') });
     await expect(store.send('r_one', 'Original selected text')).rejects.toThrow('needs review');
   });
 
@@ -342,10 +350,10 @@ describe('draft lifecycle boundaries', () => {
   it('surfaces exact receipt evidence if a local draft write fails after an acknowledged upload', async () => {
     const { f, store } = await open(); await store.writeComposer('r_one', 'Keep original');
     const path = store.snapshot().composerDrafts!.r_one.path;
-    f.raw.call.mockResolvedValueOnce({ kind: 'action', result: { attachment: 'at_known' } } as never);
+    upload.mockResolvedValueOnce(receipt('files/known'));
     f.raw.roomDraft.write.mockRejectedValueOnce(new Error('Local storage unavailable'));
-    await expect(store.send('r_one', 'Keep original', undefined, [new File(['content'], 'known.txt')])).rejects.toThrow('known.txt (at_known)');
-    expect(f.raw.save).not.toHaveBeenCalled(); expect(f.raw.call).toHaveBeenCalledOnce();
+    await expect(store.send('r_one', 'Keep original', undefined, [new File(['content'], 'known.txt')])).rejects.toThrow('known.txt (files/known)');
+    expect(f.raw.save).not.toHaveBeenCalled(); expect(upload).toHaveBeenCalledOnce();
     expect([...f.drafts.values()].map(draft => draft.path)).toEqual([path]);
     expect(store.snapshot().error).toContain('Local storage unavailable');
   });

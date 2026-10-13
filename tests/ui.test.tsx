@@ -13,7 +13,7 @@ function store():Store & {send:ReturnType<typeof vi.fn>} {
 describe('retained donor chat UI and House composition',()=>{
  it('keeps saved call parts and their speaker files without any Agent draft action (Master1118)',()=>{
    const s=store(); const callId='aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa';
-   s.snapshot().callParts.push({room:'r_one',path:`call-parts/${callId}-part-1.md`,id:`${callId}-part-1`,call_id:callId,wire_call_id:'bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb',call:`../calls/${callId}.md`,part:1,start:NOW,start_offset_ms:0,duration_ms:1000,participants:[{id:'local-peer',name:'This device'},{id:'remote-peer',name:'Remote fixture'}],files:[{attachment_ref:'at_local_fixture',name:'local-speaker.webm',mime:'audio/webm',bytes:100,speaker_id:'local-peer'},{attachment_ref:'at_remote_fixture',name:'remote-speaker.webm',mime:'audio/webm',bytes:100,speaker_id:'remote-peer'}]});
+   s.snapshot().callParts.push({room:'r_one',path:`call-parts/${callId}-part-1.md`,id:`${callId}-part-1`,call_id:callId,wire_call_id:'bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb',call:`../calls/${callId}.md`,part:1,start:NOW,start_offset_ms:0,duration_ms:1000,participants:[{id:'local-peer',name:'This device'},{id:'remote-peer',name:'Remote fixture'}],files:[{path:'files/local_fixture', sha256:'0'.repeat(64),name:'local-speaker.webm',mime:'audio/webm',bytes:100,speaker_id:'local-peer'},{path:'files/remote_fixture', sha256:'0'.repeat(64),name:'remote-speaker.webm',mime:'audio/webm',bytes:100,speaker_id:'remote-peer'}]});
    render(<App store={s}/>);fireEvent.click(screen.getByRole('button',{name:'Open Product chat'}));
    fireEvent.click(screen.getByText('Recorded call parts (1)'));
    expect(screen.getByText('Part 1')).toBeTruthy();

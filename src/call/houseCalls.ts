@@ -3,7 +3,7 @@ import { houseBridge } from "@agentshouse/app-bridge";
 import type { Runtime } from "../data/house";
 const holderSchema = z
   .object({ user: z.string().min(1), name: z.string(), email: z.string() })
-  .strict();
+  .strip();
 export type Holder = z.infer<typeof holderSchema>;
 const relaySchema = z
   .object({
@@ -15,28 +15,27 @@ const relaySchema = z
             username: z.string(),
             credential: z.string(),
           })
-          .strict(),
+          .strip(),
       )
       .min(1),
     expires_at: z.string().datetime({ offset: true }),
   })
-  .strict();
+  .strip();
 function answer(value: Awaited<ReturnType<Runtime["call"]>>) {
   if (value.kind !== "action")
-    throw new Error(`House call operation was not completed (${value.kind}).`);
+    throw Object.assign(new Error(`House call operation was not completed (${value.code}).`), value);
   return value.result;
 }
-/** Exact Master-supplied House calls. Never print or persist relay credentials. */
 export class HouseCallAPI {
   constructor(private runtime: Runtime) {}
   async holders(): Promise<Holder[]> {
     return z
       .array(holderSchema)
-      .parse(answer(await this.runtime.call("apps/holders", {})));
+      .parse(answer(await this.runtime.call("holder.list", {})));
   }
   async relay(): Promise<{ iceServers: RTCIceServer[]; expiresAt: number }> {
     const result = relaySchema.parse(
-      answer(await this.runtime.call("apps/relay", {})),
+      answer(await this.runtime.call("relay.read", {})),
     );
     const expiresAt = Date.parse(result.expires_at);
     if (expiresAt <= Date.now())
@@ -51,14 +50,14 @@ export class HouseCallAPI {
   }
   async ring(to: string) {
     if (!to.trim()) throw new Error("Choose a House holder.");
-    return answer(await this.runtime.call("apps/ring", { to }));
+    return answer(await this.runtime.call("holder.ring", { to }));
   }
   async send(to: string, body: unknown) {
     if (!to.trim()) throw new Error("Choose a House holder.");
     const encoded = JSON.stringify(body);
     if (!encoded || new TextEncoder().encode(encoded).byteLength > 32768)
       throw new Error("App signaling must fit 32 KiB of JSON.");
-    return answer(await this.runtime.call("apps/messages/send", { to, body }));
+    return answer(await this.runtime.call("message.send", { to, body }));
   }
 }
 export function receiveHouseMessages(

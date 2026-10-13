@@ -24,7 +24,7 @@ function setup(autoConfirm=true){
   roomDraft:{read:vi.fn(async(_room:string,path:string)=>drafts.get(path)??null),write:vi.fn(async(room:string,path:string,_base:unknown,parts:Draft['parts'])=>{const draft={room,path,revision:`draft-${++index}`,parts,returned:null};drafts.set(path,draft);docs.set(path,{room,path,type:parts.creation.type,fields:parts.creation.fields,change:null});publish();return {outcome:'written',roomDraft:draft};})},
   save:vi.fn(async(_room:string,entries:{path:string;revision:string}[])=>{lastDrafts=entries.map(x=>drafts.get(x.path)!);drafts.clear();queue.publish([{batch:{id:'batch-1'},state:'waiting'}]);publish();if(autoConfirm)confirm();return {outcome:'saved',identifier:'batch-1'};}),call:vi.fn(),
  };
- const assets={upload:vi.fn(async(_md:Runtime,_room:string,file:File):Promise<Attachment>=>({attachment_ref:`at_${file.name.includes('speaker-1')?'first':'second'}`,name:file.name,mime:file.type,bytes:file.size})),read:vi.fn(async(_md:Runtime,_room:string,attachment:Attachment)=>({blob:new Blob(['fixture'],{type:attachment.mime}),name:attachment.name,status:'available'}))};
+ const assets={upload:vi.fn(async(_md:Runtime,_room:string,file:File):Promise<Attachment>=>({path:`files/${file.name.includes('speaker-1')?'first':'second'}`, sha256:'0'.repeat(64),name:file.name,mime:file.type,bytes:file.size})),read:vi.fn(async(_md:Runtime,_room:string,attachment:Attachment)=>({blob:new Blob(['fixture'],{type:attachment.mime}),name:attachment.name,status:'available'}))};
  const runtime=raw as unknown as Runtime;
  const writer=new HouseCallPartWriter({runtime,roomId:'r_one',callId:CALL,wireCallId:WIRE,callStartedAt:START,participants:PARTICIPANTS,assets});
  return {writer,raw,runtime,assets,docs,drafts,watches,publish,confirm,rejectBatch:()=>{for(const draft of lastDrafts)drafts.set(draft.path,{...draft,revision:`returned-${++index}`,returned:{kind:'rejected'}});queue.publish([]);publish();}};
@@ -38,7 +38,7 @@ describe('explicit House call-part writer',()=>{
   expect(f.raw.save.mock.calls[0][1].map(x=>x.path)).toEqual([`calls/${CALL}.md`,`call-parts/${CALL}-part-1.md`]);
   const saved=f.docs.get(`call-parts/${CALL}-part-1.md`)!.fields;
   expect(saved).toMatchObject({id:`${CALL}-part-1`,call_id:CALL,wire_call_id:WIRE,part:1,start:START,start_offset_ms:0,duration_ms:1000,participants:PARTICIPANTS});
-  expect((saved.files as {attachment_ref:string;speaker_id:string}[]).map(x=>[x.speaker_id,x.attachment_ref])).toEqual([['local-copy','at_first'],['remote-copy','at_second']]);
+  expect((saved.files as {path:string;speaker_id:string}[]).map(x=>[x.speaker_id,x.path])).toEqual([['local-copy','files/first'],['remote-copy','files/second']]);
   expect(f.raw.call).not.toHaveBeenCalled();
  });
  it('saves only the new part after the first call record is confirmed',async()=>{const f=setup();await f.writer.commit(part());await f.writer.commit(part(2));expect(f.raw.save.mock.calls[1][1].map(x=>x.path)).toEqual([`call-parts/${CALL}-part-2.md`]);expect(f.assets.upload).toHaveBeenCalledTimes(4);});
@@ -53,13 +53,13 @@ describe('explicit House call-part writer',()=>{
   const f=setup();f.assets.upload.mockRejectedValueOnce(new Error('transport unknown'));const recording=part();expect((await f.writer.commit(recording)).outcome).toBe('uncertain');expect((await f.writer.commit(recording)).outcome).toBe('uncertain');expect((await f.writer.reconcile(recording)).outcome).toBe('uncertain');expect(f.assets.upload).toHaveBeenCalledOnce();expect(f.raw.save).not.toHaveBeenCalled();
  });
  it('retains the first receipt if the second upload loses its answer',async()=>{
-  const f=setup();f.assets.upload.mockResolvedValueOnce({attachment_ref:'at_first',name:'first.webm',mime:'audio/webm',bytes:10}).mockRejectedValueOnce(new Error('lost second answer'));const recording=part();expect((await f.writer.commit(recording)).outcome).toBe('uncertain');await f.writer.commit(recording);expect(f.assets.upload).toHaveBeenCalledTimes(2);expect(f.raw.save).not.toHaveBeenCalled();
+  const f=setup();f.assets.upload.mockResolvedValueOnce({path:'files/first', sha256:'0'.repeat(64),name:'first.webm',mime:'audio/webm',bytes:10}).mockRejectedValueOnce(new Error('lost second answer'));const recording=part();expect((await f.writer.commit(recording)).outcome).toBe('uncertain');await f.writer.commit(recording);expect(f.assets.upload).toHaveBeenCalledTimes(2);expect(f.raw.save).not.toHaveBeenCalled();
  });
  it('waits for readable audio before creating any Room documents and resumes without reuploading',async()=>{
   const f=setup();f.assets.read.mockResolvedValueOnce({blob:null as unknown as Blob,name:'first',status:'not_saved'});const recording=part();expect((await f.writer.commit(recording)).outcome).toBe('uncertain');expect(f.raw.roomDraft.write).not.toHaveBeenCalled();expect((await f.writer.reconcile(recording)).outcome).toBe('rejected');expect(await f.writer.commit(recording)).toEqual({outcome:'committed'});expect(f.assets.upload).toHaveBeenCalledTimes(2);
  });
  it('retains exact draft revisions after local save refusal, without repeat uploads',async()=>{
-  const f=setup();f.raw.save.mockResolvedValueOnce({outcome:'refused',rule:'stale'} as never);const recording=part();expect((await f.writer.commit(recording)).outcome).toBe('rejected');expect(f.drafts.size).toBe(2);expect(await f.writer.commit(recording)).toEqual({outcome:'committed'});expect(f.assets.upload).toHaveBeenCalledTimes(2);expect(f.raw.roomDraft.write).toHaveBeenCalledTimes(2);expect(f.raw.save).toHaveBeenCalledTimes(2);
+  const f=setup();f.raw.save.mockResolvedValueOnce({outcome:'refused',code:'stale',retryable:false} as never);const recording=part();expect((await f.writer.commit(recording)).outcome).toBe('rejected');expect(f.drafts.size).toBe(2);expect(await f.writer.commit(recording)).toEqual({outcome:'committed'});expect(f.assets.upload).toHaveBeenCalledTimes(2);expect(f.raw.roomDraft.write).toHaveBeenCalledTimes(2);expect(f.raw.save).toHaveBeenCalledTimes(2);
  });
  it('never blindly repeats a save whose result was lost, then reconciles read-only',async()=>{
   const f=setup();f.raw.save.mockImplementationOnce(async()=>{throw new Error('save transport unknown');});const recording=part();expect((await f.writer.commit(recording)).outcome).toBe('uncertain');expect((await f.writer.commit(recording)).outcome).toBe('uncertain');expect(f.raw.save).toHaveBeenCalledOnce();f.confirm();expect(await f.writer.reconcile(recording)).toEqual({outcome:'committed'});expect(f.assets.upload).toHaveBeenCalledTimes(2);expect(f.raw.save).toHaveBeenCalledOnce();
