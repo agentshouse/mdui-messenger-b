@@ -112,6 +112,13 @@ describe('sync-aware Messenger bindings',()=>{
   f.observations['sync-status'].publish({...f.observations['sync-status'].current(),lastCompleted:'2026-10-11T13:00:00Z'});
   await vi.waitFor(()=>expect(s.snapshot().chats).toHaveLength(1));s.dispose();
  });
+ it('keeps the completed snapshot ready while a query becomes pending, then accepts its next completion',async()=>{
+  const f=fakeRuntime(),s=new HouseMessengerStore(async()=>f.runtime);await s.start();
+  f.observations.query.publish({pending:[]} as never);
+  expect(s.snapshot()).toMatchObject({loading:false,error:null});expect(s.snapshot().messages).toHaveLength(1);
+  f.setDocuments([chat(),message(),{...message(),path:'messages/33333333-3333-4333-8333-333333333333.md',fields:{...message().fields,id:'33333333-3333-4333-8333-333333333333'}}]);
+  expect(s.snapshot()).toMatchObject({loading:false,error:null});expect(s.snapshot().messages).toHaveLength(2);s.dispose();
+ });
  it('recovers from temporary reach and authorization loss without erasing existing chat snapshots',async()=>{
   const f=fakeRuntime(),s=new HouseMessengerStore(async()=>f.runtime);await s.start();const bindings=f.observations.rooms.current();
   f.observations.rooms.publish([]);expect(s.snapshot().chats).toHaveLength(1);
