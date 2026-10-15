@@ -1,0 +1,267 @@
+{
+  "$defs": {
+    "attachment": {
+      "type": "object",
+      "properties": {
+        "attachment_ref": {
+          "type": "string",
+          "pattern": "^at_[a-zA-Z0-9_.-]+$"
+        },
+        "name": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 200
+        },
+        "mime": {
+          "type": "string",
+          "maxLength": 100
+        },
+        "bytes": {
+          "type": "integer",
+          "minimum": 0
+        }
+      },
+      "required": [
+        "attachment_ref",
+        "name",
+        "mime",
+        "bytes"
+      ],
+      "additionalProperties": false
+    },
+    "participant": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^.+$",
+          "description": "Negotiated per-call peer/copy identity. This is not a House User ID."
+        },
+        "name": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 200
+        }
+      },
+      "required": [
+        "id",
+        "name"
+      ],
+      "additionalProperties": false
+    }
+  },
+  "messenger_chat": {
+    "type": "object",
+    "properties": {
+      "id": {
+        "type": "string",
+        "format": "uuid"
+      },
+      "title": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 200
+      },
+      "mode": {
+        "enum": [
+          "room",
+          "direct",
+          "group"
+        ]
+      },
+      "created_at": {
+        "type": "string",
+        "format": "date-time"
+      }
+    },
+    "required": [
+      "id",
+      "title",
+      "mode",
+      "created_at"
+    ],
+    "additionalProperties": false
+  },
+  "messenger_message": {
+    "type": "object",
+    "properties": {
+      "id": {
+        "type": "string",
+        "format": "uuid"
+      },
+      "chat": {
+        "type": "string",
+        "reference": "messenger_chat"
+      },
+      "text": {
+        "type": "string",
+        "maxLength": 50000
+      },
+      "created_at": {
+        "type": "string",
+        "format": "date-time"
+      },
+      "kind": {
+        "enum": [
+          "text",
+          "voice",
+          "file"
+        ]
+      },
+      "reply": {
+        "type": "string",
+        "reference": "messenger_message"
+      },
+      "attachments": {
+        "type": "array",
+        "items": {
+          "$ref": "#/$defs/attachment"
+        },
+        "maxItems": 8
+      }
+    },
+    "required": [
+      "id",
+      "chat",
+      "text",
+      "created_at",
+      "kind",
+      "attachments"
+    ],
+    "additionalProperties": false
+  },
+  "messenger_call": {
+    "type": "object",
+    "properties": {
+      "id": {
+        "type": "string",
+        "format": "uuid"
+      },
+      "chat": {
+        "type": "string",
+        "reference": "messenger_chat"
+      },
+      "started_at": {
+        "type": "string",
+        "format": "date-time"
+      },
+      "participants": {
+        "type": "array",
+        "items": {
+          "$ref": "#/$defs/participant"
+        },
+        "minItems": 2,
+        "maxItems": 2
+      },
+      "wire_call_id": {
+        "type": "string",
+        "format": "uuid"
+      }
+    },
+    "required": [
+      "id",
+      "chat",
+      "started_at",
+      "participants",
+      "wire_call_id"
+    ],
+    "additionalProperties": false
+  },
+  "messenger_call_part": {
+    "type": "object",
+    "properties": {
+      "id": {
+        "type": "string",
+        "pattern": "^[0-9a-f-]{36}-part-[1-9][0-9]*$"
+      },
+      "call": {
+        "type": "string",
+        "reference": "messenger_call"
+      },
+      "call_id": {
+        "type": "string",
+        "format": "uuid"
+      },
+      "part": {
+        "type": "integer",
+        "minimum": 1
+      },
+      "start": {
+        "type": "string",
+        "format": "date-time"
+      },
+      "start_offset_ms": {
+        "type": "number",
+        "minimum": 0
+      },
+      "duration_ms": {
+        "type": "number",
+        "minimum": 0
+      },
+      "participants": {
+        "type": "array",
+        "items": {
+          "$ref": "#/$defs/participant"
+        },
+        "minItems": 2,
+        "maxItems": 2
+      },
+      "files": {
+        "type": "array",
+        "minItems": 2,
+        "maxItems": 2,
+        "items": {
+          "type": "object",
+          "properties": {
+            "attachment_ref": {
+              "type": "string",
+              "pattern": "^at_[a-zA-Z0-9_.-]+$"
+            },
+            "name": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 200
+            },
+            "mime": {
+              "type": "string",
+              "maxLength": 100
+            },
+            "bytes": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "speaker_id": {
+              "type": "string",
+              "pattern": "^.+$"
+            }
+          },
+          "required": [
+            "attachment_ref",
+            "name",
+            "mime",
+            "bytes",
+            "speaker_id"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "wire_call_id": {
+        "type": "string",
+        "format": "uuid"
+      }
+    },
+    "required": [
+      "id",
+      "call",
+      "call_id",
+      "part",
+      "start",
+      "start_offset_ms",
+      "duration_ms",
+      "participants",
+      "files",
+      "wire_call_id"
+    ],
+    "additionalProperties": false
+  }
+}
