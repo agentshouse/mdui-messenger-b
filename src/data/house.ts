@@ -569,7 +569,11 @@ export class HouseMessengerStore implements Store {
           this.close.push(releaseQuery);
           renderQuery = () => {
             if (this.disposed || released || generation !== queryGeneration || !this.ready) return;
-            try { this.read(watch.current()); }
+            try {
+              const result = watch.current();
+              if ("pending" in result) return;
+              this.read(result);
+            }
             catch (e) { this.emit({ loading: false, error: this.blockingError ?? errorText(e) }); }
           };
           const off = watch.subscribe(renderQuery);
